@@ -44,6 +44,13 @@ remove_duplicates() {
         -i "${INPUT_FILE}" \
         -f "${FILE_TYPE}" \
         -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_filtered.bed"
+    if [[ -f "${CONTROL_FILE}" ]]; then
+    macs3 filterdup \
+        -i "${CONTROL_FILE}" \
+        -f "${FILE_TYPE}" \
+        -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_filtered.bed"
+    fi
+
 }
 
 build_model() {
@@ -55,14 +62,26 @@ build_model() {
         --outdir "${OUTPUT_DIRECTORY}" 2> \
         "${OUTPUT_DIRECTORY}/model.txt"
 
-    if grep -qi "mfold" "${OUTPUT_DIRECTORY}/model.txt"; then
+    if [[ -f "${CONTROL_FILE}" ]]; then
+        macs3 predictd \
+            -i "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_filtered.bed" \
+            -f "${FILE_TYPE}" \
+            -g "${GENOME_SIZE}" \
+            -m "${MFOLD_LOWER}" "${MFOLD_UPPER}" \
+            --outdir "${OUTPUT_DIRECTORY}" 2> \
+            "${OUTPUT_DIRECTORY}/control_model.txt"
+    fi
+
+if grep -qi "mfold" "${OUTPUT_DIRECTORY}"/*model.txt; then
 cat 1>&2 << EOF
 WARNING
 MACS was unable to build the model.
 Consider increasing the range of MFOLD variables in config file.
+Alternatively, you can specify your own model parameters in the config file.
+If you do this, be sure to set \$BUILD_MODEL to 0.
 EOF
-    exit 1
-    fi
+exit 1
+fi
 }
 
 get_fragment_length() {
@@ -71,6 +90,13 @@ get_fragment_length() {
         grep -Po "\d+ bps" | \
         grep -Po "\d+" \
     )
+    if [[ -f "${CONTROL_FILE}" ]]; then
+        control_fragment_length=$(\
+            grep "predicted fragment" "${OUTPUT_DIRECTORY}/model.txt" | \
+            grep -Po "\d+ bps" | \
+            grep -Po "\d+" \
+        )
+    fi
 }
 
 get_read_length() {
@@ -79,6 +105,13 @@ get_read_length() {
         grep -Po "\d+ bps" | \
         grep -Po "\d+" \
     )
+    if [[ -f "${CONTROL_FILE}" ]]; then
+        control_read_length=$(\
+            grep "tag size" "${OUTPUT_DIRECTORY}/model.txt" | \
+            grep -Po "\d+ bps" | \
+            grep -Po "\d+" \
+        )
+    fi
 }
 
 get_number_of_reads() {
@@ -87,6 +120,13 @@ get_number_of_reads() {
         grep -Po ": \d+" | \
         grep -Po "\d+" \
     )
+    if [[ -f "${CONTROL_FILE}" ]]; then
+        number_of_control_reads=$(\
+            grep "total reads" "${OUTPUT_DIRECTORY}/control_model.txt" | \
+            grep -Po ": \d+" | \
+            grep -Po "\d+" \
+        )
+    fi
 }
 
 get_coverage_track() {
@@ -99,6 +139,11 @@ get_coverage_track() {
 
 get_bias_track() {
     background_file=$1
+    local fragment_length
+    fragment_length=$2
+    local number_of_reads
+    number_of_reads=$3
+
     macs3 pileup \
         -i "${background_file}" \
         -f "${FILE_TYPE}" \
@@ -179,13 +224,22 @@ main() {
         fragment_length="${FRAGMENT_LENGTH}"
         read_length="${READ_LENGTH}"
         number_of_reads="${NUMBER_OF_READS}"
+        control_fragment_length="${CONTROL_FRAGMENT_LENGTH}"
+        control_read_length="${CONTROL_READ_LENGTH}"
+        number_of_control_reads="${NUMBER_OF_CONTROL_READS}"
     fi
     get_coverage_track
     if [[ -f "${CONTROL_FILE}" ]]; then
-        get_bias_track "${CONTROL_FILE}"
+        get_bias_track \
+            "${CONTROL_FILE}" \
+            "${control_fragment_length}" \
+            "${number_of_control_reads}"
         scale_bias_track
     else
-        get_bias_track "${INPUT_FILE}"
+        get_bias_track \
+            "${INPUT_FILE}" \
+            "${fragment_length}" \
+            "${number_of_reads}"
     fi
     get_p_values
     get_cutoff_analysis
