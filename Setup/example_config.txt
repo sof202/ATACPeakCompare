@@ -1,8 +1,6 @@
 # --------- #
 # FILEPATHS #
 # --------- #
-REPO_DIRECTORY=path/to/this/repository
-
 OUTPUT_DIRECTORY=path/to/output/directory
 INPUT_FILE=path/to/reads
 SAMPLE_NAME=abc123
