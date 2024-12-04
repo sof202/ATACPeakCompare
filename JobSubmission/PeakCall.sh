@@ -7,8 +7,8 @@
 #SBATCH --ntasks-per-node=16
 #SBATCH --mem=10G
 #SBATCH --mail-type=END 
-#SBATCH --output=peakcall%j.log
-#SBATCH --error=peakcall%j.err
+#SBATCH --output=peakcall_%j.log
+#SBATCH --error=peakcall_%j.err
 #SBATCH --job-name=peakcall
 
 usage() {
@@ -27,6 +27,16 @@ Contact: s.o.fletcher@exeter.ac.uk
 ================================================================================
 EOF
     exit 0
+}
+
+move_log_files() {
+  log_directory="${OUTPUT_DIRECTORY}/LogFiles/${USER}"
+  timestamp=$(date +%d-%h~%H-%M)
+  mkdir -p "${log_directory}"
+  mv "${SLURM_SUBMIT_DIR}/peakcall_${SLURM_JOB_ID}.log" \
+    "${log_directory}/${timestamp}_${SLURM_JOB_ID}_peakcall.log"
+  mv "${SLURM_SUBMIT_DIR}/peakcall_${SLURM_JOB_ID}.err" \
+    "${log_directory}/${timestamp}_${SLURM_JOB_ID}_peakcall.err"
 }
 
 remove_duplicates() {
@@ -91,6 +101,7 @@ main() {
     config_file=$1
     validate_config_file "${config_file}"
     source "${config_file}" || exit 1
+    move_log_files
     if [[ -f "${CONDA_EXE%/bin/conda}/etc/profile.d/conda.sh" ]]; then
         source "${CONDA_EXE%/bin/conda}/etc/profile.d/conda.sh"
     else
