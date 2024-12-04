@@ -75,10 +75,16 @@ main() {
     fi
     conda activate MACS3
     remove_duplicates
-    build_model
-    get_fragment_length 
-    get_read_length
-    get_number_of_reads
+    if [[ "${BUILD_MODEL}" -eq 1 ]]; then
+        build_model
+        get_fragment_length 
+        get_read_length
+        get_number_of_reads
+    else
+        fragment_length="${FRAGMENT_LENGTH}"
+        read_length="${READ_LENGTH}"
+        number_of_reads="${NUMBER_OF_READS}"
+    fi
     get_coverage_track
     get_bias_track
     if [[ -f "${CONTROL_FILE}" ]]; then
