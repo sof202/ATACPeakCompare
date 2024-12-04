@@ -11,6 +11,24 @@
 #SBATCH --error=peakcall%j.err
 #SBATCH --job-name=peakcall
 
+usage() {
+cat << EOF
+================================================================================
+$(basename "$0")
+================================================================================
+Purpose: Build MACS3 model and then obtain 4 bedgraph files:
+  - The bias track (lambdas)
+  - p-values for each basepair
+  - Unmerged peaks
+  - Merged peaks
+Arguments: \$1 -> full/relative path to config file
+Author: Sam Fletcher
+Contact: s.o.fletcher@exeter.ac.uk
+================================================================================
+EOF
+    exit 0
+}
+
 remove_duplicates() {
     macs3 filterdup \
         -i "${INPUT_SAMPLE}" \
