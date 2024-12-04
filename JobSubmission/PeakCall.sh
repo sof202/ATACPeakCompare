@@ -200,6 +200,22 @@ get_bias_track() {
     fi
 }
 
+scale_bias_track() {
+    read_ratio=$(\
+        echo "scale=5; ${number_of_reads}/${number_of_control_reads}" | \
+        bc \
+    )
+    macs3 bdgopt \
+        -i "${OUTPUT_DIRECTORY}/bias_track.bdg" \
+        -m multiply \
+        -p "${read_ratio}" \
+        -o "${OUTPUT_DIRECTORY}/bias_track_scaled.bdg"
+    rm "${OUTPUT_DIRECTORY}/bias_track.bdg"
+    mv \
+        "${OUTPUT_DIRECTORY}/bias_track_scaled.bdg" \
+        "${OUTPUT_DIRECTORY}/bias_track.bdg" 
+}
+
 main() {
     config_file=$1
     validate_config_file "${config_file}"
