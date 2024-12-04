@@ -41,7 +41,7 @@ move_log_files() {
 
 remove_duplicates() {
     macs3 filterdup \
-        -i "${INPUT_SAMPLE}" \
+        -i "${INPUT_FILE}" \
         -f "${FILE_TYPE}" \
         -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_filtered.bed"
 }
@@ -94,8 +94,65 @@ get_coverage_track() {
         -i "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_filtered.bed" \
         -f "${FILE_TYPE}" \
         --extsize "${fragment_length}" \
-        -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_pileup.bed"
         -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_pileup.bdg"
+}
+
+get_bias_track() {
+    background_file=$1
+    macs3 pileup \
+        -i "${background_file}" \
+        -f "${FILE_TYPE}" \
+        -B \
+        --extsize "$(echo "scale=5; ${fragment_length}/2" | bc)" \
+        -o "${OUTPUT_DIRECTORY}/background_fragment.bdg"
+    macs3 pileup \
+        -i "${background_file}" \
+        -f "${FILE_TYPE}" \
+        -B \
+        --extsize "$(echo "scale=5; ${SMALL_LOCAL_SIZE}/2" | bc)" \
+        -o "${OUTPUT_DIRECTORY}/background_small_local.bdg"
+    macs3 pileup \
+        -i "${background_file}" \
+        -f "${FILE_TYPE}" \
+        -B \
+        --extsize "$(echo "scale=5; ${LARGE_LOCAL_SIZE}/2" | bc)" \
+        -o "${OUTPUT_DIRECTORY}/background_large_local.bdg"
+
+    macs3 bdgopt \
+        -i "${OUTPUT_DIRECTORY}/background_small_local.bdg" \
+        -m multiply \
+        -p "$(echo "scale=5; ${fragment_length}/${SMALL_LOCAL_SIZE}" | bc)" \
+        -o "${OUTPUT_DIRECTORY}/background_small_local_norm.bdg"
+    macs3 bdgopt \
+        -i "${OUTPUT_DIRECTORY}/background_large_local.bdg" \
+        -m multiply \
+        -p "$(echo "scale=5; ${fragment_length}/${LARGE_LOCAL_SIZE}" | bc)" \
+        -o "${OUTPUT_DIRECTORY}/background_large_local_norm.bdg"
+
+    macs3 bdgcmp \
+        -m max \
+        -t "${OUTPUT_DIRECTORY}/background_small_local_norm.bdg" \
+        -c "${OUTPUT_DIRECTORY}/background_large_local_norm.bdg" \
+        -o "${OUTPUT_DIRECTORY}/background_small_large_local.bdg"
+    macs3 bdgcmp \
+        -m max \
+        -t "${OUTPUT_DIRECTORY}/background_small_large_local.bdg" \
+        -c "${OUTPUT_DIRECTORY}/background_fragment.bdg" \
+        -o "${OUTPUT_DIRECTORY}/background_local.bdg"
+
+    global_background="$(\
+        echo "scale=5; ${number_of_reads}*${fragment_length}/${GENOME_SIZE}" | \
+        bc \
+    )"
+    macs3 bdgopt \
+        -i "${OUTPUT_DIRECTORY}/background_local.bdg" \
+        -m max \
+        -p "${global_background}" \
+        -o "${OUTPUT_DIRECTORY}/bias_track.bdg"
+
+    if [[ "${DEBUG_MODE}" -ne 1 ]]; then
+        rm "${OUTPUT_DIRECTORY}"/background*.bdg
+    fi
 }
 
 main() {
@@ -124,9 +181,11 @@ main() {
         number_of_reads="${NUMBER_OF_READS}"
     fi
     get_coverage_track
-    get_bias_track
     if [[ -f "${CONTROL_FILE}" ]]; then
+        get_bias_track "${CONTROL_FILE}"
         scale_bias_track
+    else
+        get_bias_track "${INPUT_FILE}"
     fi
     get_p_values
     get_cutoff_analysis
