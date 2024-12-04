@@ -60,7 +60,7 @@ build_model() {
         -g "${GENOME_SIZE}" \
         -m "${MFOLD_LOWER}" "${MFOLD_UPPER}" \
         --outdir "${OUTPUT_DIRECTORY}" 2> \
-        "${OUTPUT_DIRECTORY}/model.txt"
+        "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_model.txt"
 
     if [[ -f "${CONTROL_FILE}" ]]; then
         macs3 predictd \
@@ -69,7 +69,7 @@ build_model() {
             -g "${GENOME_SIZE}" \
             -m "${MFOLD_LOWER}" "${MFOLD_UPPER}" \
             --outdir "${OUTPUT_DIRECTORY}" 2> \
-            "${OUTPUT_DIRECTORY}/control_model.txt"
+            "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_model.txt"
     fi
 
 if grep -qi "mfold" "${OUTPUT_DIRECTORY}"/*model.txt; then
@@ -86,13 +86,13 @@ fi
 
 get_fragment_length() {
     fragment_length=$(\
-        grep "predicted fragment" "${OUTPUT_DIRECTORY}/model.txt" | \
+        grep "predicted fragment" "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_model.txt" | \
         grep -Po "\d+ bps" | \
         grep -Po "\d+" \
     )
     if [[ -f "${CONTROL_FILE}" ]]; then
         control_fragment_length=$(\
-            grep "predicted fragment" "${OUTPUT_DIRECTORY}/model.txt" | \
+            grep "predicted fragment" "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_model.txt" | \
             grep -Po "\d+ bps" | \
             grep -Po "\d+" \
         )
@@ -101,13 +101,13 @@ get_fragment_length() {
 
 get_read_length() {
     read_length=$(\
-        grep "tag size" "${OUTPUT_DIRECTORY}/model.txt" | \
+        grep "tag size" "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_model.txt" | \
         grep -Po "\d+ bps" | \
         grep -Po "\d+" \
     )
     if [[ -f "${CONTROL_FILE}" ]]; then
         control_read_length=$(\
-            grep "tag size" "${OUTPUT_DIRECTORY}/model.txt" | \
+            grep "tag size" "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_model.txt" | \
             grep -Po "\d+ bps" | \
             grep -Po "\d+" \
         )
@@ -116,13 +116,13 @@ get_read_length() {
 
 get_number_of_reads() {
     number_of_reads=$(\
-        grep "total reads" "${OUTPUT_DIRECTORY}/model.txt" | \
+        grep "total reads" "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_model.txt" | \
         grep -Po ": \d+" | \
         grep -Po "\d+" \
     )
     if [[ -f "${CONTROL_FILE}" ]]; then
         number_of_control_reads=$(\
-            grep "total reads" "${OUTPUT_DIRECTORY}/control_model.txt" | \
+            grep "total reads" "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_model.txt" | \
             grep -Po ": \d+" | \
             grep -Po "\d+" \
         )
@@ -193,7 +193,7 @@ get_bias_track() {
         -i "${OUTPUT_DIRECTORY}/background_local.bdg" \
         -m max \
         -p "${global_background}" \
-        -o "${OUTPUT_DIRECTORY}/bias_track.bdg"
+        -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_bias_track.bdg"
 
     if [[ "${DEBUG_MODE}" -ne 1 ]]; then
         rm "${OUTPUT_DIRECTORY}"/background*.bdg
@@ -206,14 +206,14 @@ scale_bias_track() {
         bc \
     )
     macs3 bdgopt \
-        -i "${OUTPUT_DIRECTORY}/bias_track.bdg" \
+        -i "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_bias_track.bdg" \
         -m multiply \
         -p "${read_ratio}" \
-        -o "${OUTPUT_DIRECTORY}/bias_track_scaled.bdg"
-    rm "${OUTPUT_DIRECTORY}/bias_track.bdg"
+        -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_bias_track_scaled.bdg"
+    rm "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_bias_track.bdg"
     mv \
-        "${OUTPUT_DIRECTORY}/bias_track_scaled.bdg" \
-        "${OUTPUT_DIRECTORY}/bias_track.bdg" 
+        "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_bias_track_scaled.bdg" \
+        "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_bias_track.bdg" 
 }
 
 get_p_values() {
