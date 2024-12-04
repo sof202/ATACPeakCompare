@@ -11,6 +11,13 @@
 #SBATCH --error=peakcall%j.err
 #SBATCH --job-name=peakcall
 
+remove_duplicates() {
+    macs3 filterdup \
+        -i "${INPUT_SAMPLE}" \
+        -f "${FILE_TYPE}" \
+        -o "${PROCESSING_DIRECTORY}/${SAMPLE_NAME}_filtered.bed"
+}
+
 main() {
     config_file=$1
     validate_config_file "${config_file}"
