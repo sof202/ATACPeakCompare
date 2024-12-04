@@ -224,6 +224,24 @@ get_p_values() {
         -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_pvalues.bdg"
 }
 
+get_cutoff_analysis() {
+    macs3 bdgpeakcall \
+        -i "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_pvalues.bdg" \
+        --cutoff-analysis \
+        -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_cutoff_analysis.txt"
+}
+
+get_best_cutoff() {
+    # We need to use tail here in case of any warning messages due to dtypes
+    # not being configured correctly for pandas
+    cutoff=$(\
+        python3 "${PYTHON_SCRIPTS}/get_cutoff.py" \
+        "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_cutoff_analysis.txt" \
+        "${AVERAGE_PEAK_LENGTH}" | \
+        tail -1 \
+    )
+}
+
 main() {
     config_file=$1
     validate_config_file "${config_file}"
@@ -266,8 +284,12 @@ main() {
             "${number_of_reads}"
     fi
     get_p_values
-    get_cutoff_analysis
-    get_best_cutoff
+    if [[ -z "${CUTOFF}" ]]; then
+        get_cutoff_analysis
+        get_best_cutoff
+    else
+        cutoff="${CUTOFF}"
+    fi
     get_unmerged_peaks
     get_merged_peaks
 }
