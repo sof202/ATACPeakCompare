@@ -18,6 +18,49 @@ remove_duplicates() {
         -o "${PROCESSING_DIRECTORY}/${SAMPLE_NAME}_filtered.bed"
 }
 
+build_model() {
+    macs3 predictd \
+        -i "${PROCESSING_DIRECTORY}/${SAMPLE_NAME}_filtered.bed" \
+        -f "${FILE_TYPE}" \
+        -g "${GENOME_SIZE}" \
+        -m "${MFOLD_LOWER}" "${MFOLD_UPPER}" \
+        --outdir "${PROCESSING_DIRECTORY}" 2> \
+        "${PROCESSING_DIRECTORY}/model.txt"
+
+    if grep -qi "mfold" "${PROCESSING_DIRECTORY}/model.txt"; then
+cat >> "${LOG_FILE}" << EOF
+WARNING
+MACS was unable to build the model.
+Consider increasing the range of MFOLD variables in config file.
+EOF
+    exit 1
+    fi
+}
+
+get_fragment_length() {
+    fragment_length=$(\
+        grep "predicted fragment" "${PROCESSING_DIRECTORY}/model.txt" | \
+        grep -Po "\d+ bps" | \
+        grep -Po "\d+" \
+    )
+}
+
+get_read_length() {
+    read_length=$(\
+        grep "tag size" "${PROCESSING_DIRECTORY}/model.txt" | \
+        grep -Po "\d+ bps" | \
+        grep -Po "\d+" \
+    )
+}
+
+get_number_of_reads() {
+    number_of_reads=$(\
+        grep "total reads" "${PROCESSING_DIRECTORY}/model.txt" | \
+        grep -Po ": \d+" | \
+        grep -Po "\d+" \
+    )
+}
+
 main() {
     config_file=$1
     validate_config_file "${config_file}"
@@ -32,8 +75,10 @@ main() {
     fi
     conda activate MACS3
     remove_duplicates
+    build_model
     get_fragment_length 
     get_read_length
+    get_number_of_reads
     get_coverage_track
     get_bias_track
     if [[ -f "${CONTROL_FILE}" ]]; then
