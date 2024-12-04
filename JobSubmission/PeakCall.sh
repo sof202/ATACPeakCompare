@@ -95,6 +95,7 @@ get_coverage_track() {
         -f "${FILE_TYPE}" \
         --extsize "${fragment_length}" \
         -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_pileup.bed"
+        -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_pileup.bdg"
 }
 
 main() {
