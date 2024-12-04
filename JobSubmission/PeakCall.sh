@@ -134,7 +134,7 @@ get_coverage_track() {
         -i "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_filtered.bed" \
         -f "${FILE_TYPE}" \
         --extsize "${fragment_length}" \
-        -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_pileup.bdg"
+        -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_coverage.bdg"
 }
 
 get_bias_track() {
@@ -214,6 +214,14 @@ scale_bias_track() {
     mv \
         "${OUTPUT_DIRECTORY}/bias_track_scaled.bdg" \
         "${OUTPUT_DIRECTORY}/bias_track.bdg" 
+}
+
+get_p_values() {
+    macs3 bdgcmp \
+        -t "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_coverage.bdg" \
+        -c "${OUTPUT_DIRECTORY}/bias_track.bdg" \
+        -m ppois \
+        -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_pvalues.bdg"
 }
 
 main() {
