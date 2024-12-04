@@ -242,6 +242,23 @@ get_best_cutoff() {
     )
 }
 
+get_unmerged_peaks() {
+    macs3 bdgpeakcall \
+        -i "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_pvalues.bdg" \
+        -c "${cutoff}" \
+        -l "${fragment_length}" \
+        -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_unmerged_peaks.bed"
+}
+
+get_merged_peaks() {
+    macs3 bdgpeakcall \
+        -i "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_pvalues.bdg" \
+        -c "${cutoff}" \
+        -l "${fragment_length}" \
+        -g "${read_length}" \
+        -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_merged_peaks.bed"
+}
+
 main() {
     config_file=$1
     validate_config_file "${config_file}"
