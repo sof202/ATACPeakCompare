@@ -79,6 +79,14 @@ get_number_of_reads() {
     )
 }
 
+get_coverage_track() {
+    macs3 pileup \
+        -i "${PROCESSING_DIRECTORY}/${SAMPLE_NAME}_filtered.bed" \
+        -f "${FILE_TYPE}" \
+        --extsize "${fragment_length}" \
+        -o "${PROCESSING_DIRECTORY}/${SAMPLE_NAME}_pileup.bed"
+}
+
 main() {
     config_file=$1
     validate_config_file "${config_file}"
