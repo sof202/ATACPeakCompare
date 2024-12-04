@@ -105,13 +105,6 @@ get_read_length() {
         grep -Po "\d+ bps" | \
         grep -Po "\d+" \
     )
-    if [[ -f "${CONTROL_FILE}" ]]; then
-        control_read_length=$(\
-            grep "tag size" "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_model.txt" | \
-            grep -Po "\d+ bps" | \
-            grep -Po "\d+" \
-        )
-    fi
 }
 
 get_number_of_reads() {
@@ -284,7 +277,6 @@ main() {
         read_length="${READ_LENGTH}"
         number_of_reads="${NUMBER_OF_READS}"
         control_fragment_length="${CONTROL_FRAGMENT_LENGTH}"
-        control_read_length="${CONTROL_READ_LENGTH}"
         number_of_control_reads="${NUMBER_OF_CONTROL_READS}"
     fi
     get_coverage_track
