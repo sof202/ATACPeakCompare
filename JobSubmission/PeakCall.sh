@@ -46,7 +46,7 @@ build_model() {
         "${PROCESSING_DIRECTORY}/model.txt"
 
     if grep -qi "mfold" "${PROCESSING_DIRECTORY}/model.txt"; then
-cat >> "${LOG_FILE}" << EOF
+cat 1>&2 << EOF
 WARNING
 MACS was unable to build the model.
 Consider increasing the range of MFOLD variables in config file.
