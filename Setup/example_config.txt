@@ -1,0 +1,62 @@
+# --------- #
+# FILEPATHS #
+# --------- #
+REPO_DIRECTORY=path/to/this/repository
+
+OUTPUT_DIRECTORY=path/to/output/directory
+INPUT_FILE=path/to/reads
+SAMPLE_NAME=abc123
+
+# One from AUTO,BAM,SAM,BED,ELAND,ELANDMULTI,ELANDEXPORT,BOWTIE,BAMPE,BEDPE
+FILE_TYPE=AUTO
+
+# If you do not have a control file for this sample, leave this line commented
+# out.
+# CONTROL_FILE=path/to/control/file
+
+# ---------- #
+# PARAMETERS #
+# ---------- #
+
+# To estimate the fragment length, read length and get the number of reads
+# in your input files, MACS3 can build a model. If you already know these
+# values or want to play around with manual values, turn BUILD_MODEL off by
+# setting it to 0.
+BUILD_MODEL=1
+
+# Having too small a range here can result in errors (which will be 
+# communicated to you). The defaults here are given by MACS.
+# Comment these out if you aren't building a model.
+MFOLD_LOWER=5
+MFOLD_UPPER=50
+
+# Given genome size is for human. You don't need to be 100% accurate here, it
+# is used for averaging.
+GENOME_SIZE=2700000000
+
+# Uncomment these if BUILD_MODEL is set to 0.
+# FRAGMENT_LENGTH=254
+# READ_LENGTH=101
+# NUMBER_OF_READS=4000000
+# CONTROL_FRAGMENT_LENGTH=253
+# NUMBER_OF_CONTROL_READS=
+
+# When generating a bias track (lambdas to use with poisson distribution) two
+# levels of 'local' are suggested. A 'small' local and a 'wider/larger'
+# local background.
+SMALL_LOCAL_SIZE=1000
+LARGE_LOCAL_SIZE=10000
+
+# Cutoff analysis is a part of the pipeline. If you want to use a custom
+# cutoff (for peaks), uncomment CUTOFF (cutoff is on negative log scale). 
+# If you want to use the cutoff analysis uncomment AVERAGE_PEAK_LENGTH. Using
+# this will pick a cutoff that ensures peaks are on average this length.
+# CUTOFF=1.3
+# AVERAGE_PEAK_LENGTH=500
+
+# ----- #
+# DEBUG #
+# ----- #
+
+If you want to keep all intermediate files, set this to 1
+DEBUG_MODE=0
