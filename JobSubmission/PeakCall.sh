@@ -15,6 +15,15 @@ main() {
     config_file=$1
     validate_config_file "${config_file}"
     source "${config_file}" || exit 1
+    if [[ -f "${CONDA_EXE%/bin/conda}/etc/profile.d/conda.sh" ]]; then
+        source "${CONDA_EXE%/bin/conda}/etc/profile.d/conda.sh"
+    else
+        # fallback
+        source "${CONDA_EXE%/condabin/conda}/etc/profile.d/conda.sh" || \
+            { >&2 echo "Could not find conda executable, please check you have activated conda first."
+            exit 1; }
+    fi
+    conda activate MACS3
     remove_duplicates
     get_fragment_length 
     get_read_length
