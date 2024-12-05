@@ -284,7 +284,7 @@ main() {
             { >&2 echo "Could not find conda executable, please check you have activated conda first."
             exit 1; }
     fi
-    conda activate MACS3
+    conda activate PeakCompare-MACS
     remove_duplicates
     if [[ "${BUILD_MODEL}" -eq 1 ]]; then
         build_model
