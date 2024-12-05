@@ -32,6 +32,15 @@ config files by copying the template.
 3) Run the MACS pipeline with SLURM: 
 `sbatch .../JobSubmission/PeakCall.sh path/to/config.txt`
 
+## Software Requirements
+
+Please ensure that each of these pieces of software can be found on your
+`PATH` environment variable.
+
+- [bash](https://www.gnu.org/software/bash/) (>=4.2.46(2))
+- [SLURM Workload Manager](https://slurm.schedmd.com/overview.html) (>=20.02.3)
+- [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) (>=v23.10.0)
+
 ## Overview of pipeline
 
 After the bias track (lambdas) have been generated, the following steps are
