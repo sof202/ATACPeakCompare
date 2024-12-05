@@ -30,7 +30,9 @@ EOF
 }
 
 validate_config_file() {
+  local config_file_location
   config_file_location=$1
+  local script_location
   script_location=$(\
     scontrol show job "${SLURM_JOB_ID}" | \
     grep "Command" | \
@@ -49,7 +51,9 @@ validate_config_file() {
 }
 
 move_log_files() {
+  local log_directory
   log_directory="${OUTPUT_DIRECTORY}/LogFiles/${USER}"
+  local timestamp
   timestamp=$(date +%d-%h~%H-%M)
   mkdir -p "${log_directory}"
   mv "${SLURM_SUBMIT_DIR}/peakcall_${SLURM_JOB_ID}.log" \
@@ -64,12 +68,11 @@ remove_duplicates() {
         -f "${FILE_TYPE}" \
         -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_filtered.bed"
     if [[ -f "${CONTROL_FILE}" ]]; then
-    macs3 filterdup \
-        -i "${CONTROL_FILE}" \
-        -f "${FILE_TYPE}" \
-        -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_filtered.bed"
+        macs3 filterdup \
+            -i "${CONTROL_FILE}" \
+            -f "${FILE_TYPE}" \
+            -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_filtered.bed"
     fi
-
 }
 
 build_model() {
@@ -103,6 +106,8 @@ exit 1
 fi
 }
 
+# These functions are very messy, but there is not easily parsable model that
+# MACS can create (unless you modify the source code it would appear).
 get_fragment_length() {
     fragment_length=$(\
         grep "predicted fragment" "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_model.txt" | \
@@ -252,6 +257,7 @@ get_best_cutoff() {
         "${AVERAGE_PEAK_LENGTH}" | \
         tail -1 \
     )
+    echo "Using a cutoff value of ${cutoff}."
 }
 
 get_unmerged_peaks() {
@@ -284,7 +290,9 @@ main() {
             { >&2 echo "Could not find conda executable, please check you have activated conda first."
             exit 1; }
     fi
-    conda activate PeakCompare-MACS
+    conda activate PeakCompare-MACS || \
+        { >&2 echo "Conda environment does not exist. Please run setup script first."
+        exit 1; }
     remove_duplicates
     if [[ "${BUILD_MODEL}" -eq 1 ]]; then
         build_model
