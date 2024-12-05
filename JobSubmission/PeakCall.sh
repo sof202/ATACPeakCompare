@@ -29,6 +29,25 @@ EOF
     exit 0
 }
 
+validate_config_file() {
+  config_file_location=$1
+  script_location=$(\
+    scontrol show job "${SLURM_JOB_ID}" | \
+    grep "Command" | \
+    awk '{print $1}' | \
+    awk 'BEGIN {FS="="} {print $2}' \
+  )
+    PYTHON_SCRIPTS="$(dirname "${script_location}")/../Python_Scripts"
+    PYTHON_SCRIPTS="$(realpath "${PYTHON_SCRIPTS}")"
+  python \
+    "${PYTHON_SCRIPTS}/validate_config_file.py" \
+    "${config_file_location}"
+  if [[ $? -eq 1 ]]; then
+    echo "ERROR: Malformed config file detected."
+    exit 1
+  fi
+}
+
 move_log_files() {
   log_directory="${OUTPUT_DIRECTORY}/LogFiles/${USER}"
   timestamp=$(date +%d-%h~%H-%M)
