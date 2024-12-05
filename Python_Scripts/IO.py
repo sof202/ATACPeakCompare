@@ -65,6 +65,38 @@ def read_bedbase(file_path: str) -> Optional[pd.DataFrame]:
         return None
 
 
+def read_narrow_peak_file(file_path: str) -> Optional[pd.DataFrame]:
+    """Reads a BED3+7 file from MACS into a pandas DataFrame.
+
+    Args:
+        file_path (str): The path to the bedbase file.
+
+    Returns:
+        Optional[pd.DataFrame]: The DataFrame containing the bed data,
+        or None if an error occurred.
+    """
+    try:
+        bed = pd.read_csv(file_path, sep="\t", skiprows=1)
+        if bed.shape[1] != 10:
+            raise ValueError(f"Bed file at {file_path}"
+                             "does not have exactly 10 columns.")
+        bed.columns = ["CHR", "START", "END", "NAME", "SCORE", "STRAND",
+                       "SIGNAL_VALUE", "PVALUE", "QVALUE", "SUMMIT"]
+        return bed
+    except (FileNotFoundError, IOError):
+        print(f"{file_path} does not exist or could not be read.")
+        return None
+    except IsADirectoryError:
+        print(f"{file_path} is a directory.")
+        return None
+    except PermissionError:
+        print(f"Permission denied for {file_path}")
+        return None
+    except OSError as e:
+        print(f"OS error occurred: {e}")
+        return None
+
+
 def write_file(data: pd.DataFrame, file_path: str) -> None:
     """Writes a pandas DataFrame to a file in tab-separated format.
 
