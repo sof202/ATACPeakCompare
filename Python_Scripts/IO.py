@@ -13,7 +13,7 @@ def read_bedgraph(file_path: str) -> Optional[pd.DataFrame]:
         or None if an error occurred.
     """
     try:
-        bedgraph = pd.read_csv(file_path, sep="\t")
+        bedgraph = pd.read_table(file_path, sep="\t")
         if bedgraph.shape[1] != 4:
             raise ValueError(f"Bedgraph file at {file_path}"
                              "does not have exactly 4 columns.")
@@ -45,7 +45,7 @@ def read_bedbase(file_path: str) -> Optional[pd.DataFrame]:
         or None if an error occurred.
     """
     try:
-        bedbase = pd.read_csv(file_path, sep="\t")
+        bedbase = pd.read_table(file_path, sep="\t")
         if bedbase.shape[1] != 3:
             raise ValueError(f"Bedbase file at {file_path}"
                              "does not have exactly 3 columns.")
@@ -76,7 +76,7 @@ def read_narrow_peak_file(file_path: str) -> Optional[pd.DataFrame]:
         or None if an error occurred.
     """
     try:
-        bed = pd.read_csv(file_path, sep="\t", skiprows=1)
+        bed = pd.read_table(file_path, sep="\t", skiprows=1)
         if bed.shape[1] != 10:
             raise ValueError(f"Bed file at {file_path}"
                              "does not have exactly 10 columns.")
