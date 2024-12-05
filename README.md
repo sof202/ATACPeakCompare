@@ -18,6 +18,29 @@ Although this pipeline was designed to look at ATAC data, the only assumption
 on your data is that it is peak callable (count based data). Hence ChIP-Seq
 and DNase-Seq (and many more) are also applicable to be used here.
 
+## Setup
+
+In order to run the scripts included in this repository, you will need
+to complete the below required steps:
+
+1) Download all [required software](#software-requirements)
+2) Fill in the example config file found in `.../Setup` and place this file
+in a memorable location. Be sure to read the comments to avoid confusion around
+control files. Each configuration will enable the processing of a single sample.
+If you wish to run the pipeline on multiple samples, consider creating multiple
+config files by copying the template.
+3) Run the MACS pipeline with SLURM: 
+`sbatch .../JobSubmission/PeakCall.sh path/to/config.txt`
+
+## Software Requirements
+
+Please ensure that each of these pieces of software can be found on your
+`PATH` environment variable.
+
+- [bash](https://www.gnu.org/software/bash/) (>=4.2.46(2))
+- [SLURM Workload Manager](https://slurm.schedmd.com/overview.html) (>=20.02.3)
+- [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) (>=v23.10.0)
+
 ## Overview of pipeline
 
 After the bias track (lambdas) have been generated, the following steps are
