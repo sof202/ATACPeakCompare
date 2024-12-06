@@ -1,16 +1,15 @@
 import pandas as pd
-from typing import Optional, TypeVar
-pandasDataFrame = TypeVar('pandas.core.frame.DataFrame')
+from typing import Optional
 
 
-def read_bedgraph(file_path: str) -> Optional[pandasDataFrame]:
+def read_bedgraph(file_path: str) -> Optional[pd.DataFrame]:
     """Reads a bedgraph file into a pandas DataFrame.
 
     Args:
         file_path (str): The path to the bedgraph file.
 
     Returns:
-        Optional[pandasDataFrame]: The DataFrame containing the bedgraph data,
+        Optional[pd.DataFrame]: The DataFrame containing the bedgraph data,
         or None if an error occurred.
     """
     try:
@@ -42,7 +41,7 @@ def read_bedbase(file_path: str) -> Optional[pd.DataFrame]:
         file_path (str): The path to the bedbase file.
 
     Returns:
-        Optional[pandasDataFrame]: The DataFrame containing the bedbase data,
+        Optional[pd.DataFrame]: The DataFrame containing the bedbase data,
         or None if an error occurred.
     """
     try:
@@ -102,7 +101,7 @@ def write_file(data: pd.DataFrame, file_path: str) -> None:
     """Writes a pandas DataFrame to a file in tab-separated format.
 
     Args:
-        data (pandasDataFrame): The DataFrame to write to the file.
+        data (pd.DataFrame): The DataFrame to write to the file.
         file_path (str): The path to the output file.
     """
     try:
