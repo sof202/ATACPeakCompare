@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from IO import BedBase
+from IO import BedBase, BedBaseCI
 from scipy.stats import poisson
 from typing import NamedTuple
 
@@ -19,19 +19,19 @@ def caculate_exact_lambda_ci(lambdas: np.ndarray,
 
 def generate_bias_track_ci(bias_bedbase: BedBase,
                            coverage_bedbase: BedBase
-                           ) -> pd.DataFrame:
+                           ) -> BedBaseCI:
     bias_bedbase = bias_bedbase.get()
     coverage_bedbase = coverage_bedbase.get()
     lambda_ci = caculate_exact_lambda_ci(
         lambdas=bias_bedbase["SCORE"].to_numpy(),
         reads=coverage_bedbase["SCORE"].to_numpy()
     )
-    bias_bedbase_ci = pd.DataFrame({
-        "CHR": coverage_bedbase["CHR"],
-        "BASE": coverage_bedbase["BASE"],
-        "LOWER": pd.Series(lambda_ci[0]),
-        "UPPER": pd.Series(lambda_ci[1])
-    })
+    bias_bedbase_ci = BedBaseCI(
+        CHR=coverage_bedbase.get()["CHR"],
+        BASE=coverage_bedbase.get()["BASE"],
+        LOWER_SCORE=pd.Series(lambda_ci[0]),
+        UPPER_SCORE=pd.Series(lambda_ci[1])
+    )
     return bias_bedbase_ci
 
 
@@ -40,23 +40,21 @@ def calculate_pavlue(reads: np.ndarray, lambdas: np.ndarray) -> np.ndarray:
 
 
 def generate_pvalue_ci(bias_bedbase: BedBase,
-                       coverage_bedbase: BedBase) -> pd.DataFrame:
+                       coverage_bedbase: BedBase) -> BedBaseCI:
     bias_bedbase_ci = generate_bias_track_ci(bias_bedbase, coverage_bedbase)
-    coverage_bedbase = coverage_bedbase.get()
-    bias_bedbase_ci = bias_bedbase_ci.get()
 
     lower_pvalue = calculate_pavlue(
-        coverage_bedbase["SCORE"],
-        bias_bedbase_ci["LOWER"]
+        coverage_bedbase.get()["SCORE"],
+        bias_bedbase_ci.get()["LOWER_SCORE"]
     )
     upper_pvalue = calculate_pavlue(
-        coverage_bedbase["SCORE"],
-        bias_bedbase_ci["UPPER"]
+        coverage_bedbase.get()["SCORE"],
+        bias_bedbase_ci.get()["UPPER_SCORE"]
     )
-    pvalues_bedbase_ci = pd.DataFrame({
-        "CHR": coverage_bedbase["CHR"],
-        "BASE": coverage_bedbase["BASE"],
-        "LOWER": pd.Series(lower_pvalue),
-        "UPPER": pd.Series(upper_pvalue)
-    })
+    pvalues_bedbase_ci = BedBaseCI(
+        CHR=coverage_bedbase.get()["CHR"],
+        BASE=coverage_bedbase.get()["BASE"],
+        LOWER_SCORE=pd.Series(lower_pvalue),
+        UPPER_SCORE=pd.Series(upper_pvalue)
+    )
     return pvalues_bedbase_ci
