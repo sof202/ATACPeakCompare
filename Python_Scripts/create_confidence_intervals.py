@@ -12,6 +12,11 @@ class ConfidenceInterval(NamedTuple):
 
 def caculate_exact_lambda_ci(lambdas: np.ndarray,
                              reads: np.ndarray) -> ConfidenceInterval:
+    # zero reads results in divide by zero. Adding a small number here results
+    # in huge confidence intervals, adding a large number here is dishonest.
+    # A middle ground here is adding 1 or 2 to the read count.
+    if any(reads == 0):
+        reads += 1
     lower = np.exp(np.log(lambdas) - np.sqrt(1 / reads * lambdas))
     upper = np.exp(np.log(lambdas) + np.sqrt(1 / reads * lambdas))
     return ConfidenceInterval(lower=lower, upper=upper)
@@ -20,11 +25,9 @@ def caculate_exact_lambda_ci(lambdas: np.ndarray,
 def generate_bias_track_ci(bias_bedbase: BedBase,
                            coverage_bedbase: BedBase
                            ) -> BedBaseCI:
-    bias_bedbase = bias_bedbase.get()
-    coverage_bedbase = coverage_bedbase.get()
     lambda_ci = caculate_exact_lambda_ci(
-        lambdas=bias_bedbase["SCORE"].to_numpy(),
-        reads=coverage_bedbase["SCORE"].to_numpy()
+        lambdas=bias_bedbase.get()["SCORE"].to_numpy(),
+        reads=coverage_bedbase.get()["SCORE"].to_numpy()
     )
     bias_bedbase_ci = BedBaseCI(
         CHR=coverage_bedbase.get()["CHR"],
@@ -43,13 +46,16 @@ def generate_pvalue_ci(bias_bedbase: BedBase,
                        coverage_bedbase: BedBase) -> BedBaseCI:
     bias_bedbase_ci = generate_bias_track_ci(bias_bedbase, coverage_bedbase)
 
+    # A higher lambda in the poisson distribution will cause the same number
+    # of reads to generate a lower pvalue. To stay consistent with naming, we
+    # switch the order of upper and lower below.
     lower_pvalue = calculate_pavlue(
         coverage_bedbase.get()["SCORE"],
-        bias_bedbase_ci.get()["LOWER_SCORE"]
+        bias_bedbase_ci.get()["UPPER_SCORE"]
     )
     upper_pvalue = calculate_pavlue(
         coverage_bedbase.get()["SCORE"],
-        bias_bedbase_ci.get()["UPPER_SCORE"]
+        bias_bedbase_ci.get()["LOWER_SCORE"]
     )
     pvalues_bedbase_ci = BedBaseCI(
         CHR=coverage_bedbase.get()["CHR"],
