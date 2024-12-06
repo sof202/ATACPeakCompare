@@ -2,7 +2,47 @@ import pandas as pd
 from typing import Optional
 
 
-class BedGraph:
+class GenomicData:
+    """
+    Base class for genomic data representations (e.g., BedBase, BedGraph).
+    """
+
+    def __init__(self, df: pd.DataFrame):
+        """
+        Initializes a GenomicData object.
+
+        Args:
+            df (pd.DataFrame): The underlying pandas DataFrame.
+        """
+        self.df = df
+
+    def get(self) -> pd.DataFrame:
+        """
+        Returns underlying pandas DataFrame
+        """
+        return self.df
+
+    def write_file(self, file_path: str) -> None:
+        """Writes a pandas DataFrame to a file in tab-separated format.
+
+        Args:
+            data (pd.DataFrame): The DataFrame to write to the file.
+            file_path (str): The path to the output file.
+        """
+        try:
+            with open(file_path, 'w') as file:
+                self.df.to_csv(file, sep="\t", header=False, index=False)
+        except (FileNotFoundError, IOError):
+            print(f"Data could not be written to {file_path}.")
+        except IsADirectoryError:
+            print(f"{file_path} is a directory.")
+        except PermissionError:
+            print(f"Permission denied for {file_path}")
+        except OSError as e:
+            print(f"OS error occurred: {e}")
+
+
+class BedGraph(GenomicData):
     """
     Represents a BedGraph DataFrame with specific columns: CHR, START, END,
     SCORE.
@@ -69,7 +109,7 @@ class BedGraph:
             return None
 
 
-class BedBase:
+class BedBase(GenomicData):
     """
     Represents a BedBase DataFrame with specific columns: CHR, BASE, SCORE.
     """
@@ -133,7 +173,7 @@ class BedBase:
             return None
 
 
-class Bed:
+class Bed(GenomicData):
     """
     Represents a Bed DataFrame with specific columns: CHR, START, END
     """
@@ -195,23 +235,3 @@ class Bed:
         except OSError as e:
             print(f"OS error occurred: {e}")
             return None
-
-
-def write_file(data: pd.DataFrame, file_path: str) -> None:
-    """Writes a pandas DataFrame to a file in tab-separated format.
-
-    Args:
-        data (pd.DataFrame): The DataFrame to write to the file.
-        file_path (str): The path to the output file.
-    """
-    try:
-        with open(file_path, 'w') as file:
-            data.to_csv(file, sep="\t", header=False, index=False)
-    except (FileNotFoundError, IOError):
-        print(f"{data} could not be written to {file_path}.")
-    except IsADirectoryError:
-        print(f"{file_path} is a directory.")
-    except PermissionError:
-        print(f"Permission denied for {file_path}")
-    except OSError as e:
-        print(f"OS error occurred: {e}")
