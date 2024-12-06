@@ -65,6 +65,12 @@ class BedGraph(GenomicData):
             "END": END,
             "SCORE": SCORE
         })
+        self.df = self.df.astype({
+            "CHR": 'object',
+            "START": 'int64',
+            "END": 'int64',
+            "SCORE": 'float64'
+        })
 
     @classmethod
     def read_from_file(cls, file_path: str) -> Optional["BedGraph"]:
@@ -123,6 +129,11 @@ class BedBase(GenomicData):
             "BASE": BASE,
             "SCORE": SCORE
         })
+        self.df = self.df.astype({
+            "CHR": 'object',
+            "BASE": 'int64',
+            "SCORE": 'float64'
+        })
 
     @classmethod
     def read_from_file(cls, file_path: str) -> Optional["BedBase"]:
@@ -179,6 +190,11 @@ class Bed(GenomicData):
             "CHR": CHR,
             "START": START,
             "END": END
+        })
+        self.df = self.df.astype({
+            "CHR": 'object',
+            "START": 'int64',
+            "END": 'int64'
         })
 
     @classmethod
