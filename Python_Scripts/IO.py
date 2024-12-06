@@ -84,7 +84,15 @@ class BedGraph(GenomicData):
             or None if an error occurred.
         """
         try:
-            bedgraph = pd.read_table(file_path, sep="\t")
+            with open(file_path, 'r') as file:
+                first_line = file.readline()
+
+            # Some bedgraph files start with a meta data line
+            if first_line.startswith("track"):
+                bedgraph = pd.read_table(file_path, sep="\t", skiprows=1)
+            else:
+                bedgraph = pd.read_table(file_path, sep="\t")
+
             if bedgraph.shape[1] != 4:
                 raise ValueError(f"Bedgraph file at {file_path}"
                                  " does not have exactly 4 columns.")
