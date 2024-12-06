@@ -66,12 +66,6 @@ class BedGraph(GenomicData):
             "SCORE": SCORE
         })
 
-    def get(self) -> pd.DataFrame:
-        """
-        Returns underlying pandas DataFrame
-        """
-        return self.df
-
     @classmethod
     def read_from_file(cls, file_path: str) -> Optional["BedGraph"]:
         """Reads a bedgraph file into a pandas DataFrame.
@@ -130,12 +124,6 @@ class BedBase(GenomicData):
             "SCORE": SCORE
         })
 
-    def get(self) -> pd.DataFrame:
-        """
-        Returns underlying pandas DataFrame
-        """
-        return self.df
-
     @classmethod
     def read_from_file(cls, file_path: str) -> Optional["BedBase"]:
         """
@@ -192,12 +180,6 @@ class Bed(GenomicData):
             "START": START,
             "END": END
         })
-
-    def get(self) -> pd.DataFrame:
-        """
-        Returns underlying pandas DataFrame
-        """
-        return self.df
 
     @classmethod
     def read_from_file(cls, file_path: str) -> Optional["Bed"]:
