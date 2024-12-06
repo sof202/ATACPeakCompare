@@ -19,8 +19,8 @@ def subset_bedgraph(bedgraph: pandasDataFrame,
     ].index[0]
     end_index = bedgraph.loc[
         (bedgraph["CHR"] == chromosome) &
-        (bedgraph["START"] >= end) &
-        (bedgraph["END"] <= end)
+        (bedgraph["START"] <= end) &
+        (bedgraph["END"] >= end)
     ].index[0]
     bedgraph = bedgraph.iloc[start_index:end_index+1]
     return bedgraph
