@@ -1,12 +1,13 @@
 from extract_region import extract_bedbase_region
+from IO import Bed, BedBase
 import pandas as pd
 from typing import Optional
 
 
-def convert_narrow_peak_to_bedbase(peak_data: pd.DataFrame,
+def convert_narrow_peak_to_bedbase(peak_data: Bed,
                                    chromosome: str,
                                    start: int,
-                                   end: int) -> pd.DataFrame:
+                                   end: int) -> BedBase:
     """Converts peaks in a selected region of narrow peak data into bedbase
     format
 
@@ -26,12 +27,13 @@ def convert_narrow_peak_to_bedbase(peak_data: pd.DataFrame,
     # all bases that do not exist in the narrow peak file. This is exactly the
     # bases that are not within a peak. A trick here is to convert to Boolean
     # values to convert all non-NaN scores into 1 and all NaN scores to 0.
-    peak_data["SCORE"] = peak_data["SCORE"].fillna(0).astype(bool).astype(int)
+    score = peak_data.get()["SCORE"].fillna(0).astype(bool).astype(int)
+    peak_data.get()["SCORE"] = score
     return peak_data
 
 
-def label_peak_type(unmerged_peaks: pd.DataFrame,
-                    merged_peaks: pd.DataFrame) -> Optional[pd.DataFrame]:
+def label_peak_type(unmerged_peaks: Bed,
+                    merged_peaks: Bed) -> Optional[BedBase]:
     """Using two bedbase files from narrow peak files the types of peak are
     determined.
 
@@ -47,6 +49,8 @@ def label_peak_type(unmerged_peaks: pd.DataFrame,
         2 indicates a peak only after mering. Returns None if the input
         data frames do not align (different bases).
     """
+    unmerged_peaks = unmerged_peaks.get()
+    merged_peaks = merged_peaks.get()
     if unmerged_peaks["BASE"] != merged_peaks["BASE"]:
         print("ERROR: unmerged and merged peak files have been created over",
               "different regions.")
@@ -67,6 +71,9 @@ def label_peak_type(unmerged_peaks: pd.DataFrame,
     # peaks file.
     labelled_peaks["SCORE"] = labelled_peaks["SCORE_x"] + \
         labelled_peaks["SCORE_y"]
-    labelled_peaks = labelled_peaks.loc[["CHR", "BASE", "SCORE"]]
-
+    labelled_peaks = BedBase(
+        labelled_peaks["CHR"],
+        labelled_peaks["BASE"],
+        labelled_peaks["SCORE"]
+    )
     return labelled_peaks

@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from IO import BedBase
 from scipy.stats import poisson
 from typing import NamedTuple
 
@@ -16,9 +17,11 @@ def caculate_exact_lambda_ci(lambdas: np.ndarray,
     return ConfidenceInterval(lower=lower, upper=upper)
 
 
-def generate_bias_track_ci(bias_bedbase: pd.DataFrame,
-                           coverage_bedbase: pd.DataFrame
+def generate_bias_track_ci(bias_bedbase: BedBase,
+                           coverage_bedbase: BedBase
                            ) -> pd.DataFrame:
+    bias_bedbase = bias_bedbase.get()
+    coverage_bedbase = coverage_bedbase.get()
     lambda_ci = caculate_exact_lambda_ci(
         lambdas=bias_bedbase["SCORE"].to_numpy(),
         reads=coverage_bedbase["SCORE"].to_numpy()
@@ -36,9 +39,12 @@ def calculate_pavlue(reads: np.ndarray, lambdas: np.ndarray) -> np.ndarray:
     return poisson.cdf(reads, lambdas)
 
 
-def generate_pvalue_ci(bias_bedbase: pd.DataFrame,
-                       coverage_bedbase: pd.DataFrame) -> pd.DataFrame:
+def generate_pvalue_ci(bias_bedbase: BedBase,
+                       coverage_bedbase: BedBase) -> pd.DataFrame:
     bias_bedbase_ci = generate_bias_track_ci(bias_bedbase, coverage_bedbase)
+    coverage_bedbase = coverage_bedbase.get()
+    bias_bedbase_ci = bias_bedbase_ci.get()
+
     lower_pvalue = calculate_pavlue(
         coverage_bedbase["SCORE"],
         bias_bedbase_ci["LOWER"]

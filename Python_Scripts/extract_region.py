@@ -1,15 +1,17 @@
 import pandas as pd
+from IO import BedGraph, BedBase
 
 
-def subset_bedgraph(bedgraph: pd.DataFrame,
+def subset_bedgraph(bedgraph: BedGraph,
                     chromosome: str,
                     start: int,
-                    end: int) -> pd.DataFrame:
-    """Subset a bedgraph to a given region.
+                    end: int) -> BedGraph:
+    """Subset a BedGraph to a given region.
 
     Returns:
-        A pandas.DataFrame covering the region selected in bedgraph format
+        A BedGraph covering the region selected
     """
+    bedgraph = bedgraph.get()
     # Ranges in bedgraph do not overlap and so these should always yield a
     # single index each.
     start_index = bedgraph.loc[
@@ -23,50 +25,52 @@ def subset_bedgraph(bedgraph: pd.DataFrame,
         (bedgraph["END"] >= end)
     ].index[0]
     bedgraph = bedgraph.iloc[start_index:end_index+1]
+    bedgraph = BedGraph(
+        CHR=bedgraph["CHR"],
+        START=bedgraph["START"],
+        END=bedgraph["END"],
+        SCORE=bedgraph["SCORE"]
+    )
     return bedgraph
 
 
-def convert_to_bedbase(bedgraph: pd.DataFrame,
+def convert_to_bedbase(bedgraph: BedGraph,
                        chromosome: str,
                        start: int,
-                       end: int) -> pd.DataFrame:
-    """Convert a bedgraph dataframe into bedbase format
-
-    Returns:
-        A pandas.DataFrame covering the region selected in bedbase format
-    """
-    bases = list(range(start, end+1))
+                       end: int) -> BedBase:
+    bases = pd.Series(list(range(start, end+1)))
     chromosome_column = [chromosome] * len(bases)
-    bedbase = pd.DataFrame(
-        zip(chromosome_column, bases),
-        columns=["CHR", "BASE"]
-    )
-    bins = list(bedgraph["START"]) + [bedgraph["END"].iloc[-1]]
-    bedbase["SCORE"] = pd.cut(
-        bedbase["BASE"],
+    bins = list(bedgraph.get()["START"]) + [bedgraph.get()["END"].iloc[-1]]
+    score = pd.cut(
+        bases,
         bins=bins,
         labels=bedgraph["SCORE"],
         include_lowest=True,
         right=False
     )
+    bedbase = BedBase(
+        CHR=chromosome_column,
+        BASE=bases,
+        SCORE=score
+    )
     return bedbase
 
 
-def extract_bedbase_region(bedgraph: pd.DataFrame,
+def extract_bedbase_region(bedgraph: BedGraph,
                            chromosome: str,
                            start: int,
-                           end: int) -> pd.DataFrame:
+                           end: int) -> BedBase:
     """Extract a region of a bedgraph data frame and convert it into bedbase
     format
 
     Args
-        bedgraph (pandas.DataFrame): Bedgraph to extract from.
+        bedgraph (BedGraph): Bedgraph to extract from.
         chromosome (str): Chromosome to extract.
         start (int): Start of region.
         end (int): End of region.
 
     Returns:
-        A pandas.DataFrame covering the region selected in bedbase format
+        A BedBase covering the region selected
     """
     bedgraph = subset_bedgraph(bedgraph, chromosome, start, end)
     bedbase = convert_to_bedbase(bedgraph, chromosome, start, end)
