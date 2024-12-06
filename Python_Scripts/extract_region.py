@@ -1,4 +1,5 @@
 import pandas as pd
+from IO import pandasDataFrame
 
 
 def subset_bedgraph(bedgraph: pandasDataFrame,
