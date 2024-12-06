@@ -117,6 +117,39 @@ class BedGraph(GenomicData):
             return None
 
 
+class BedBaseCI(GenomicData):
+    """
+    Represents a BedBase with confidence intervals with specific columns:
+    CHR, BASE, LOWER_SCORE, UPPER_SCORE.
+    """
+
+    def __init__(self, CHR, BASE, LOWER_SCORE, UPPER_SCORE):
+        """
+        Initializes a BedBase object.
+
+        Args:
+            CHR (pd.Series): Series representing the chromosome column.
+            BASE (pd.Series): Series representing the base column.
+            LOWER_SCORE (pd.Series): Series representing the score column for
+                lower bound of confidence interval. Score can be anything,
+                such as number of reads or p-value.
+            UPPER_SCORE (pd.Series): Series representing the score column for
+                upper bound of confidence interval.
+        """
+        self.df = pd.DataFrame({
+            "CHR": CHR,
+            "BASE": BASE,
+            "LOWER_SCORE": LOWER_SCORE,
+            "UPPER_SCORE": UPPER_SCORE
+        })
+        self.df = self.df.astype({
+            "CHR": 'object',
+            "BASE": 'int64',
+            "LOWER_SCORE": 'float64',
+            "UPPER_SCORE": 'float64'
+        })
+
+
 class BedBase(GenomicData):
     """
     Represents a BedBase DataFrame with specific columns: CHR, BASE, SCORE.
