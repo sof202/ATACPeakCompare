@@ -1,10 +1,10 @@
 import pandas as pd
 
 
-def subset_bedgraph(bedgraph: pd.DataFrame,
+def subset_bedgraph(bedgraph: pandasDataFrame,
                     chromosome: str,
                     start: int,
-                    end: int) -> pd.DataFrame:
+                    end: int) -> pandasDataFrame:
     """Subset a bedgraph to a given region.
 
     Returns:
@@ -26,10 +26,10 @@ def subset_bedgraph(bedgraph: pd.DataFrame,
     return bedgraph
 
 
-def convert_to_bedbase(bedgraph: pd.DataFrame,
+def convert_to_bedbase(bedgraph: pandasDataFrame,
                        chromosome: str,
                        start: int,
-                       end: int) -> pd.DataFrame:
+                       end: int) -> pandasDataFrame:
     """Convert a bedgraph dataframe into bedbase format
 
     Returns:
@@ -52,10 +52,10 @@ def convert_to_bedbase(bedgraph: pd.DataFrame,
     return bedbase
 
 
-def extract_bedbase_region(bedgraph: pd.DataFrame,
+def extract_bedbase_region(bedgraph: pandasDataFrame,
                            chromosome: str,
                            start: int,
-                           end: int) -> pd.DataFrame:
+                           end: int) -> pandasDataFrame:
     """Extract a region of a bedgraph data frame and convert it into bedbase
     format
 
