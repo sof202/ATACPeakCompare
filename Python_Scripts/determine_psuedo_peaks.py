@@ -6,10 +6,10 @@ def compare_pvalue_ci(reference_pvalue_ci: BedBaseCI,
     # For a base in the comparison dataset to be in contention to be a
     # psuedopeak, one part of the criteria is to have an overlapping (or
     # better) confidence interval with the reference dataset
-    reference_pvalues_to_beat = reference_pvalue_ci.get(
-        "LOWER_SCORE").to_numpy()
-    top_comparison_pvalue = comparison_pvalue_ci.get("UPPER_SCORE").to_numpy()
-    is_significant = (top_comparison_pvalue > reference_pvalues_to_beat)
+    pvalues_to_beat = reference_pvalue_ci.get("LOWER_SCORE").to_numpy()
+    contender_pvalues = comparison_pvalue_ci.get("UPPER_SCORE").to_numpy()
+    is_significant = (contender_pvalues > pvalues_to_beat)
+
     compared_pvalues = BedBase(
         CHR=reference_pvalue_ci.get("CHR"),
         BASE=reference_pvalue_ci.get("BASE"),
