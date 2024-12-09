@@ -49,7 +49,7 @@ validate_config_file() {
 
 move_log_files() {
   local log_directory
-  log_directory="${OUTPUT_DIRECTORY}/LogFiles/${USER}"
+  log_directory="${LOG_DIRECTORY}/${USER}"
   local timestamp
   timestamp=$(date +%d-%h~%H-%M)
   mkdir -p "${log_directory}"
