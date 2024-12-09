@@ -1,5 +1,5 @@
 import pandas as pd
-from typing import Optional
+from typing import Optional, Union
 
 
 class GenomicData:
@@ -16,11 +16,14 @@ class GenomicData:
         """
         self.df = df
 
-    def get(self) -> pd.DataFrame:
+    def get(self, column_name: str = None) -> Union[pd.DataFrame, pd.Series]:
         """
         Returns underlying pandas DataFrame
         """
-        return self.df
+        if column_name is None:
+            return self.df
+        else:
+            return self.df[column_name]
 
     def write_file(self, file_path: str) -> None:
         """Writes a pandas DataFrame to a file in tab-separated format.
