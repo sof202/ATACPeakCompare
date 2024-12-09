@@ -1,8 +1,11 @@
 from IO import BedBase, BedBaseCI
+from typing import Optional
 
 
 def compare_pvalue_ci(reference_pvalue_ci: BedBaseCI,
-                      comparison_pvalue_ci: BedBaseCI) -> BedBase:
+                      comparison_pvalue_ci: BedBaseCI) -> Optional[BedBase]:
+    if not reference_pvalue_ci.has_same_positions(comparison_pvalue_ci):
+        return None
     # For a base in the comparison dataset to be in contention to be a
     # psuedopeak, one part of the criteria is to have an overlapping (or
     # better) confidence interval with the reference dataset
@@ -21,7 +24,14 @@ def compare_pvalue_ci(reference_pvalue_ci: BedBaseCI,
 def determine_psuedopeaks(comparison_pvalues: BedBase,
                           compared_pvalues: BedBase,
                           reference_labelled_peaks: BedBase,
-                          cutoff: float) -> BedBase:
+                          cutoff: float) -> Optional[BedBase]:
+    if not comparison_pvalues.has_same_positions(compared_pvalues):
+        return None
+    if not comparison_pvalues.has_same_positions(reference_labelled_peaks):
+        return None
+    if not compared_pvalues.has_same_positions(reference_labelled_peaks):
+        return None
+
     pvalue = comparison_pvalues.get("SCORE").to_numpy()
     passed_ci_comparison = compared_pvalues.get("SCORE").to_numpy()
     peak_type = reference_labelled_peaks.get("SCORE").to_numpy()

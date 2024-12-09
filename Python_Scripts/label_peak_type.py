@@ -49,16 +49,11 @@ def label_peak_type(unmerged_peaks: Bed,
         2 indicates a peak only after mering. Returns None if the input
         data frames do not align (different bases).
     """
+    if not unmerged_peaks.has_same_positions(merged_peaks):
+        return None
+
     unmerged_peaks = unmerged_peaks.get()
     merged_peaks = merged_peaks.get()
-    if unmerged_peaks["BASE"] != merged_peaks["BASE"]:
-        print("ERROR: unmerged and merged peak files have been created over",
-              "different regions.")
-        return None
-    if unmerged_peaks["CHR"] != merged_peaks["CHR"]:
-        print("ERROR: unmerged and merged peak files have been created over",
-              "different chromosomes.")
-        return None
     labelled_peaks = pd.merge(
         unmerged_peaks,
         merged_peaks,

@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from IO import BedBase, BedBaseCI
 from scipy.stats import poisson
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 
 
 class ConfidenceInterval(NamedTuple):
@@ -43,7 +43,10 @@ def calculate_pavlue(reads: np.ndarray, lambdas: np.ndarray) -> np.ndarray:
 
 
 def generate_pvalue_ci(bias_bedbase: BedBase,
-                       coverage_bedbase: BedBase) -> BedBaseCI:
+                       coverage_bedbase: BedBase) -> Optional[BedBaseCI]:
+    if not bias_bedbase.has_same_positions(coverage_bedbase):
+        return None
+
     bias_bedbase_ci = generate_bias_track_ci(bias_bedbase, coverage_bedbase)
 
     # A higher lambda in the poisson distribution will cause the same number
