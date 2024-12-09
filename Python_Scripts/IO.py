@@ -162,6 +162,15 @@ class BedBaseCI(GenomicData):
             "UPPER_SCORE": 'float64'
         })
 
+    def has_same_positions(self, comparison: 'BedBaseCI') -> bool:
+        has_same_chromosome = self.df["CHR"].equals(comparison.df["CHR"])
+        has_same_bases = self.df["BASE"].equals(comparison.df["BASE"])
+        if has_same_chromosome and has_same_bases:
+            return True
+        print("ERROR: BedbaseCI files have been created over ",
+              "different regions.")
+        return False
+
 
 class BedBase(GenomicData):
     """
