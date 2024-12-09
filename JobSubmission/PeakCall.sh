@@ -41,8 +41,8 @@ validate_config_file() {
   )
     PYTHON_SCRIPTS="$(dirname "${script_location}")/../Python_Scripts"
     PYTHON_SCRIPTS="$(realpath "${PYTHON_SCRIPTS}")"
-  python \
-    "${PYTHON_SCRIPTS}/validate_config_file.py" \
+  python3 \
+    "${PYTHON_SCRIPTS}/validate_config_file_peak_call.py" \
     "${config_file_location}"
   if [[ $? -eq 1 ]]; then
     echo "ERROR: Malformed config file detected."
@@ -279,9 +279,6 @@ get_merged_peaks() {
 
 main() {
     config_file=$1
-    validate_config_file "${config_file}"
-    source "${config_file}" || exit 1
-    move_log_files
     if [[ -f "${CONDA_EXE%/bin/conda}/etc/profile.d/conda.sh" ]]; then
         source "${CONDA_EXE%/bin/conda}/etc/profile.d/conda.sh"
     else
@@ -293,6 +290,9 @@ main() {
     conda activate PeakCompare-MACS || \
         { >&2 echo "Conda environment does not exist. Please run setup script first."
         exit 1; }
+    validate_config_file "${config_file}"
+    source "${config_file}" || exit 1
+    move_log_files
     remove_duplicates
     if [[ "${BUILD_MODEL}" -eq 1 ]]; then
         build_model
