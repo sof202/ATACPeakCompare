@@ -75,6 +75,16 @@ class BedGraph(GenomicData):
             "SCORE": 'float64'
         })
 
+    def has_same_positions(self, comparison: 'BedGraph') -> bool:
+        has_same_chromosome = self.df["CHR"].equals(comparison.df["CHR"])
+        has_same_start = self.df["START"].equals(comparison.df["START"])
+        has_same_end = self.df["END"].equals(comparison.df["END"])
+        if has_same_chromosome and has_same_start and has_same_end:
+            return True
+        print("ERROR: BedGraph files have been created over ",
+              "different regions.")
+        return False
+
     @classmethod
     def read_from_file(cls, file_path: str) -> Optional["BedGraph"]:
         """Reads a bedgraph file into a pandas DataFrame.
@@ -179,6 +189,14 @@ class BedBase(GenomicData):
             "SCORE": 'float64'
         })
 
+    def has_same_positions(self, comparison: 'BedBase') -> bool:
+        has_same_chromosome = self.df["CHR"].equals(comparison.df["CHR"])
+        has_same_bases = self.df["BASE"].equals(comparison.df["BASE"])
+        if has_same_chromosome and has_same_bases:
+            return True
+        print("ERROR: Bedbase files have been created over different regions.")
+        return False
+
     @classmethod
     def read_from_file(cls, file_path: str) -> Optional["BedBase"]:
         """
@@ -240,6 +258,15 @@ class Bed(GenomicData):
             "START": 'int64',
             "END": 'int64'
         })
+
+    def has_same_positions(self, comparison: 'Bed') -> bool:
+        has_same_chromosome = self.df["CHR"].equals(comparison.df["CHR"])
+        has_same_start = self.df["START"].equals(comparison.df["START"])
+        has_same_end = self.df["END"].equals(comparison.df["END"])
+        if has_same_chromosome and has_same_start and has_same_end:
+            return True
+        print("ERROR: Bed files have been created over different regions.")
+        return False
 
     @classmethod
     def read_from_file(cls, file_path: str) -> Optional["Bed"]:
