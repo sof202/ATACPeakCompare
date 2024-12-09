@@ -26,12 +26,12 @@ def generate_bias_track_ci(bias_bedbase: BedBase,
                            coverage_bedbase: BedBase
                            ) -> BedBaseCI:
     lambda_ci = caculate_exact_lambda_ci(
-        lambdas=bias_bedbase.get()["SCORE"].to_numpy(),
-        reads=coverage_bedbase.get()["SCORE"].to_numpy()
+        lambdas=bias_bedbase.get("SCORE").to_numpy(),
+        reads=coverage_bedbase.get("SCORE").to_numpy()
     )
     bias_bedbase_ci = BedBaseCI(
-        CHR=coverage_bedbase.get()["CHR"],
-        BASE=coverage_bedbase.get()["BASE"],
+        CHR=coverage_bedbase.get("CHR"),
+        BASE=coverage_bedbase.get("BASE"),
         LOWER_SCORE=pd.Series(lambda_ci[0]),
         UPPER_SCORE=pd.Series(lambda_ci[1])
     )
@@ -50,16 +50,16 @@ def generate_pvalue_ci(bias_bedbase: BedBase,
     # of reads to generate a lower pvalue. To stay consistent with naming, we
     # switch the order of upper and lower below.
     lower_pvalue = calculate_pavlue(
-        coverage_bedbase.get()["SCORE"],
-        bias_bedbase_ci.get()["UPPER_SCORE"]
+        coverage_bedbase.get("SCORE"),
+        bias_bedbase_ci.get("UPPER_SCORE")
     )
     upper_pvalue = calculate_pavlue(
-        coverage_bedbase.get()["SCORE"],
-        bias_bedbase_ci.get()["LOWER_SCORE"]
+        coverage_bedbase.get("SCORE"),
+        bias_bedbase_ci.get("LOWER_SCORE")
     )
     pvalues_bedbase_ci = BedBaseCI(
-        CHR=coverage_bedbase.get()["CHR"],
-        BASE=coverage_bedbase.get()["BASE"],
+        CHR=coverage_bedbase.get("CHR"),
+        BASE=coverage_bedbase.get("BASE"),
         LOWER_SCORE=pd.Series(lower_pvalue),
         UPPER_SCORE=pd.Series(upper_pvalue)
     )

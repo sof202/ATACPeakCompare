@@ -40,11 +40,11 @@ def convert_to_bedbase(bedgraph: BedGraph,
                        end: int) -> BedBase:
     bases = pd.Series(list(range(start, end+1)))
     chromosome_column = pd.Series([chromosome] * len(bases))
-    bins = list(bedgraph.get()["START"]) + [bedgraph.get()["END"].iloc[-1]]
+    bins = list(bedgraph.get("START")) + [bedgraph.get("END").iloc[-1]]
     score = pd.cut(
         bases,
         bins=bins,
-        labels=bedgraph.get()["SCORE"],
+        labels=bedgraph.get("SCORE"),
         include_lowest=True,
         ordered=False,
         right=False

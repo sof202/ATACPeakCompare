@@ -27,7 +27,7 @@ def convert_narrow_peak_to_bedbase(peak_data: Bed,
     # all bases that do not exist in the narrow peak file. This is exactly the
     # bases that are not within a peak. A trick here is to convert to Boolean
     # values to convert all non-NaN scores into 1 and all NaN scores to 0.
-    score = peak_data.get()["SCORE"].fillna(0).astype(bool).astype(int)
+    score = peak_data.get("SCORE").fillna(0).astype(bool).astype(int)
     peak_data.get()["SCORE"] = score
     return peak_data
 
