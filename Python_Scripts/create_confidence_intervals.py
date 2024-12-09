@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
-from IO import BedBase, BedBaseCI
+from IO import BedBase, BedBaseCI, IncompatabilityError
 from scipy.stats import poisson
-from typing import NamedTuple, Optional
+from typing import NamedTuple
 
 
 class ConfidenceInterval(NamedTuple):
@@ -43,9 +43,10 @@ def calculate_pavlue(reads: np.ndarray, lambdas: np.ndarray) -> np.ndarray:
 
 
 def generate_pvalue_ci(bias_bedbase: BedBase,
-                       coverage_bedbase: BedBase) -> Optional[BedBaseCI]:
+                       coverage_bedbase: BedBase) -> BedBaseCI:
     if not bias_bedbase.has_same_positions(coverage_bedbase):
-        return None
+        raise IncompatabilityError(
+            "Bias track and coverage track are over different regions.")
 
     bias_bedbase_ci = generate_bias_track_ci(bias_bedbase, coverage_bedbase)
 

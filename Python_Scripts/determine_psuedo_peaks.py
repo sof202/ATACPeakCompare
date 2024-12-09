@@ -1,11 +1,11 @@
-from IO import BedBase, BedBaseCI
-from typing import Optional
+from IO import BedBase, BedBaseCI, IncompatabilityError
 
 
 def compare_pvalue_ci(reference_pvalue_ci: BedBaseCI,
-                      comparison_pvalue_ci: BedBaseCI) -> Optional[BedBase]:
+                      comparison_pvalue_ci: BedBaseCI) -> BedBase:
     if not reference_pvalue_ci.has_same_positions(comparison_pvalue_ci):
-        return None
+        raise IncompatabilityError(
+            "Reference and comparison files must be over the same region.")
     # For a base in the comparison dataset to be in contention to be a
     # psuedopeak, one part of the criteria is to have an overlapping (or
     # better) confidence interval with the reference dataset
@@ -24,13 +24,16 @@ def compare_pvalue_ci(reference_pvalue_ci: BedBaseCI,
 def determine_psuedopeaks(comparison_pvalues: BedBase,
                           compared_pvalues: BedBase,
                           reference_labelled_peaks: BedBase,
-                          cutoff: float) -> Optional[BedBase]:
+                          cutoff: float) -> BedBase:
     if not comparison_pvalues.has_same_positions(compared_pvalues):
-        return None
+        raise IncompatabilityError(
+            "All BedBase files must be over the same region.")
     if not comparison_pvalues.has_same_positions(reference_labelled_peaks):
-        return None
+        raise IncompatabilityError(
+            "All BedBase files must be over the same region.")
     if not compared_pvalues.has_same_positions(reference_labelled_peaks):
-        return None
+        raise IncompatabilityError(
+            "All BedBase files must be over the same region.")
 
     pvalue = comparison_pvalues.get("SCORE").to_numpy()
     passed_ci_comparison = compared_pvalues.get("SCORE").to_numpy()

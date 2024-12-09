@@ -1,7 +1,6 @@
 from extract_region import extract_bedbase_region
-from IO import Bed, BedBase
+from IO import Bed, BedBase, IncompatabilityError
 import pandas as pd
-from typing import Optional
 
 
 def convert_narrow_peak_to_bedbase(peak_data: Bed,
@@ -32,8 +31,8 @@ def convert_narrow_peak_to_bedbase(peak_data: Bed,
     return peak_data
 
 
-def label_peak_type(unmerged_peaks: Bed,
-                    merged_peaks: Bed) -> Optional[BedBase]:
+def label_peak_type(unmerged_peaks: BedBase,
+                    merged_peaks: BedBase) -> BedBase:
     """Using two bedbase files from narrow peak files the types of peak are
     determined.
 
@@ -50,7 +49,8 @@ def label_peak_type(unmerged_peaks: Bed,
         data frames do not align (different bases).
     """
     if not unmerged_peaks.has_same_positions(merged_peaks):
-        return None
+        raise IncompatabilityError(
+            "Merged and unmerged peaks have incompatible regions")
 
     unmerged_peaks = unmerged_peaks.get()
     merged_peaks = merged_peaks.get()

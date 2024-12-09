@@ -2,6 +2,11 @@ import pandas as pd
 from typing import Optional, Union
 
 
+class IncompatabilityError(Exception):
+    """Exception for when positions in two files don't align"""
+    pass
+
+
 class GenomicData:
     """
     Base class for genomic data representations (e.g., BedBase, BedGraph).
@@ -81,8 +86,6 @@ class BedGraph(GenomicData):
         has_same_end = self.df["END"].equals(comparison.df["END"])
         if has_same_chromosome and has_same_start and has_same_end:
             return True
-        print("ERROR: BedGraph files have been created over ",
-              "different regions.")
         return False
 
     @classmethod
@@ -167,8 +170,6 @@ class BedBaseCI(GenomicData):
         has_same_bases = self.df["BASE"].equals(comparison.df["BASE"])
         if has_same_chromosome and has_same_bases:
             return True
-        print("ERROR: BedbaseCI files have been created over ",
-              "different regions.")
         return False
 
 
@@ -203,7 +204,6 @@ class BedBase(GenomicData):
         has_same_bases = self.df["BASE"].equals(comparison.df["BASE"])
         if has_same_chromosome and has_same_bases:
             return True
-        print("ERROR: Bedbase files have been created over different regions.")
         return False
 
     @classmethod
@@ -274,7 +274,6 @@ class Bed(GenomicData):
         has_same_end = self.df["END"].equals(comparison.df["END"])
         if has_same_chromosome and has_same_start and has_same_end:
             return True
-        print("ERROR: Bed files have been created over different regions.")
         return False
 
     @classmethod
