@@ -1,0 +1,42 @@
+# ---------- #
+# PARAMETERS #
+# ---------- #
+
+# The region that you wish to inspect. It is recommended that you pick a region
+# that is mainly characterised by peaks in your reference dataset. A larger
+# region will result in slowdown.
+CHROMOSOME=chr1
+START=500
+END=1000
+
+# The cutoff that was used when peak calling with the reference dataset
+# Recall that this isn't the actual value, but the -log() value of the cutoff
+# meaning 5 is actually 1e-5.
+CUTOFF=5
+
+# ---------- #
+# FILE PATHS #
+# ---------- #
+
+# Unless you have changed the names of the files created by PeakCall.sh, you
+# should only need to put the output directory and sample name used in script 
+# here. Otherwise you will need to provide full paths (or possibly just change 
+# the names) for each of the following files.
+
+REFERENCE_DATASET_OUTPUT_DIRECTORY="full/path/to/reference_dataset/outputs"
+REFERENCE_SAMPLE_NAME="sample_name_for_reference_dataset"
+
+COMPARISON_DATASET_OUTPUT_DIRECTORY="full/path/to/comparison_dataset/outputs"
+COMPARISON_SAMPLE_NAME="sample_name_for_comparison_dataset"
+
+REFERENCE_MERGED_PEAK_FILE="${REFERENCE_DATASET_OUTPUT_DIRECTORY}/${REFERENCE_SAMPLE_NAME}_merged_peaks.bed"
+REFERENCE_UNMERGED_PEAK_FILE="${REFERENCE_DATASET_OUTPUT_DIRECTORY}/${REFERENCE_SAMPLE_NAME}_unmerged_peaks.bed"
+REFERENCE_BIAS_TRACK_FILE="${REFERENCE_DATASET_OUTPUT_DIRECTORY}/${REFERENCE_SAMPLE_NAME}_bias_track.bdg"
+REFERENCE_COVERAGE_TRACK_FILE="${REFERENCE_DATASET_OUTPUT_DIRECTORY}/${REFERENCE_SAMPLE_NAME}_coverage.bdg"
+COMPARISON_BIAS_TRACK_FILE="${COMPARISON_DATASET_OUTPUT_DIRECTORY}/${COMPARISON_SAMPLE_NAME}_bias_track.bdg"
+COMPARISON_COVERAGE_TRACK_FILE="${COMPARISON_DATASET_OUTPUT_DIRECTORY}/${COMPARISON_SAMPLE_NAME}_coverage.bdg"
+COMPARISON_PVALUE_FILE="${COMPARISON_DATASET_OUTPUT_DIRECTORY}/${COMPARISON_SAMPLE_NAME}_pvalues.bdg"
+
+# This is the directory the log files will be put in (Metric is printed to the
+# output log file)
+LOG_DIRECTORY="path/to/log/files"
