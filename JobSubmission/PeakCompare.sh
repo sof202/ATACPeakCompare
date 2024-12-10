@@ -122,7 +122,9 @@ main() {
     fi
 
     rm "${TEMP_DIRECTORY}/${REFERENCE_SAMPLE_NAME}"*.bdg \
-      "${TEMP_DIRECTORY}/${COMPARISON_SAMPLE_NAME}"*.bdg
+      "${TEMP_DIRECTORY}/${COMPARISON_SAMPLE_NAME}"*.bdg \
+      "${TEMP_DIRECTORY}/${REFERENCE_SAMPLE_NAME}"*.bed \
+      "${TEMP_DIRECTORY}/${COMPARISON_SAMPLE_NAME}"*.bed
 }
 
 if [[ $# -ne 1 ]]; then usage; fi
