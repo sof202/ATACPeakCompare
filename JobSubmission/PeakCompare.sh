@@ -42,7 +42,7 @@ validate_config_file() {
     "${PYTHON_SCRIPTS}/validate_peak_compare_config.py" \
     "${config_file_location}"
   if [[ $? -eq 1 ]]; then
-    echo "ERROR: Malformed config file detected."
+    >&2 echo "ERROR: Malformed config file detected."
     exit 1
   fi
 }
@@ -61,7 +61,7 @@ move_log_files() {
 
 subset_file() {
   file=$1
-  grep "${CHROMOSOME}" "${file}" > "${TEMP_DIRECTORY}/${file}"
+  grep "${CHROMOSOME}" "${file}" > "${TEMP_DIRECTORY}/$(basename "${file}")"
 }
 
 main() {
