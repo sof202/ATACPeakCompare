@@ -24,7 +24,7 @@ def validate_variable_existence(config_variables: dict) -> None:
         "SMALL_LOCAL_SIZE",
         "LARGE_LOCAL_SIZE"
     ]
-    if config_variables["BUILD_MODEL"] == 1:
+    if config_variables["BUILD_MODEL"] == "1":
         variables_to_check.append("MFOLD_LOWER")
         variables_to_check.append("MFOLD_UPPER")
     else:
