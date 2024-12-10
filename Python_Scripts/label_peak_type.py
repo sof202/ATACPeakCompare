@@ -1,5 +1,6 @@
 from extract_region import extract_bedbase_region
-from IO import Bed, BedBase, IncompatabilityError
+from IO import Bed, BedGraph, BedBase, IncompatabilityError
+import numpy as np
 import pandas as pd
 
 
@@ -20,6 +21,12 @@ def convert_narrow_peak_to_bedbase(peak_data: Bed,
         A pandas.DataFrame in bedbase format of the selected region where the
         score column is 0 if no peak is at that base, and 1 if there is a peak.
     """
+    peak_data = BedGraph(
+        CHR=peak_data.get("CHR"),
+        START=peak_data.get("START"),
+        END=peak_data.get("END"),
+        SCORE=pd.Series(np.zeros(len(peak_data.get("START"))))
+    )
     peak_data = extract_bedbase_region(peak_data, chromosome, start, end)
 
     # extract_bedbase_region() will return NaN values in the SCORE column for
