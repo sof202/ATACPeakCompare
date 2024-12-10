@@ -40,12 +40,15 @@ def get_config_variables(file_path: str) -> dict:
     return config_variables
 
 
-def is_variable_missing(variable: str, config_variables: dict) -> bool:
+def is_variable_missing(variable: str,
+                        config_variables: dict,
+                        quiet: bool = False) -> bool:
     if variable not in config_variables:
-        print(
-            f"{variable} is missing from config file.",
-            "Please check the example config for what is required."
-        )
+        if not quiet:
+            print(
+                f"{variable} is missing from config file.",
+                "Please check the example config for what is required."
+            )
         return True
     return False
 
