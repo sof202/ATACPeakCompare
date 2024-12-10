@@ -97,13 +97,13 @@ main() {
         "${CHROMOSOME}" \
         "${START}" \
         "${END}" \
-        "${TEMP_DIRECTORY}/${REFERENCE_MERGED_PEAK_FILE}" \
-        "${TEMP_DIRECTORY}/${REFERENCE_UNMERGED_PEAK_FILE}" \
-        "${TEMP_DIRECTORY}/${REFERENCE_BIAS_TRACK_FILE}" \
-        "${TEMP_DIRECTORY}/${REFERENCE_COVERAGE_TRACK_FILE}" \
-        "${TEMP_DIRECTORY}/${COMPARISON_BIAS_TRACK_FILE}" \
-        "${TEMP_DIRECTORY}/${COMPARISON_COVERAGE_TRACK_FILE}" \
-        "${TEMP_DIRECTORY}/${COMPARISON_PVALUE_FILE}" \
+        "${TEMP_DIRECTORY}/$(basename "${REFERENCE_MERGED_PEAK_FILE}")" \
+        "${TEMP_DIRECTORY}/$(basename "${REFERENCE_UNMERGED_PEAK_FILE}")" \
+        "${TEMP_DIRECTORY}/$(basename "${REFERENCE_BIAS_TRACK_FILE}")" \
+        "${TEMP_DIRECTORY}/$(basename "${REFERENCE_COVERAGE_TRACK_FILE}")" \
+        "${TEMP_DIRECTORY}/$(basename "${COMPARISON_BIAS_TRACK_FILE}")" \
+        "${TEMP_DIRECTORY}/$(basename "${COMPARISON_COVERAGE_TRACK_FILE}")" \
+        "${TEMP_DIRECTORY}/$(basename "${COMPARISON_PVALUE_FILE}")" \
         "${CUTOFF}"
     else
       python3 \
