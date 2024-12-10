@@ -70,7 +70,7 @@ def any_file_paths_missing(config_variables: dict) -> bool:
     ]
     for path in paths_to_check:
         file_missing = file_missing or path_does_not_exist(
-            config_variables[path], path
+            config_variables[path], path, dir=True
         )
     return file_missing
 
