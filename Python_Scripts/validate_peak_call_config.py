@@ -81,7 +81,7 @@ def any_variables_incorrect(config_variables: dict) -> bool:
         positive_integer_variables.append("READ_LENGTH")
         positive_integer_variables.append("FRAGMENT_LENGTH")
         positive_integer_variables.append("NUMBER_OF_READS")
-    if is_variable_missing("CUTOFF", config_variables):
+    if is_variable_missing("CUTOFF", config_variables, quiet=True):
         positive_integer_variables.append("AVERAGE_PEAK_LENGTH")
 
     for variable in positive_integer_variables:
