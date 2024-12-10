@@ -90,9 +90,10 @@ main() {
     subset_file "${COMPARISON_COVERAGE_TRACK_FILE}"
     subset_file "${COMPARISON_PVALUE_FILE}"
 
-    python3 \
+    if [[ "${UNMERGED}" -eq 1 ]]; then
+      python3 \
         "${PYTHON_SCRIPTS}/peak_compare.py" \
-        "$(if [[ ${UNMERGED} -eq 1 ]]; then echo "--unmerged"; fi)" \
+        --unmerged \
         "${CHROMOSOME}" \
         "${START}" \
         "${END}" \
@@ -104,6 +105,21 @@ main() {
         "${TEMP_DIRECTORY}/${COMPARISON_COVERAGE_TRACK_FILE}" \
         "${TEMP_DIRECTORY}/${COMPARISON_PVALUE_FILE}" \
         "${CUTOFF}"
+    else
+      python3 \
+        "${PYTHON_SCRIPTS}/peak_compare.py" \
+        "${CHROMOSOME}" \
+        "${START}" \
+        "${END}" \
+        "${TEMP_DIRECTORY}/${REFERENCE_MERGED_PEAK_FILE}" \
+        "${TEMP_DIRECTORY}/${REFERENCE_UNMERGED_PEAK_FILE}" \
+        "${TEMP_DIRECTORY}/${REFERENCE_BIAS_TRACK_FILE}" \
+        "${TEMP_DIRECTORY}/${REFERENCE_COVERAGE_TRACK_FILE}" \
+        "${TEMP_DIRECTORY}/${COMPARISON_BIAS_TRACK_FILE}" \
+        "${TEMP_DIRECTORY}/${COMPARISON_COVERAGE_TRACK_FILE}" \
+        "${TEMP_DIRECTORY}/${COMPARISON_PVALUE_FILE}" \
+        "${CUTOFF}"
+    fi
 
     rm "${TEMP_DIRECTORY}/${REFERENCE_SAMPLE_NAME}*.bed" \
       "${TEMP_DIRECTORY}/${COMPARISON_SAMPLE_NAME}*.bed"
