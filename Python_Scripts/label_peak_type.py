@@ -12,13 +12,13 @@ def convert_narrow_peak_to_bedbase(peak_data: Bed,
     format
 
     Args
-        peak_data (pandas.DataFrame): Narrow peak data in BED3+7 format.
+        peak_data (Bed): Narrow peak data.
         chromosome (str): Chromosome to extract.
         start (int): Start of region.
         end (int): End of region.
 
     Returns:
-        A pandas.DataFrame in bedbase format of the selected region where the
+        A BedBase object of the selected region where the
         score column is 0 if no peak is at that base, and 1 if there is a peak.
     """
     peak_data = BedGraph(
@@ -44,13 +44,11 @@ def label_peak_type(unmerged_peaks: BedBase,
     determined.
 
     Args:
-        unmerged_peaks (pandas DataFrame): A set of peaks before merging peaks
-        in bedbase format.
-        merged_peaks (pandas DataFrame): A set of peaks after merging peaks in
-        bedbase format.
+        unmerged_peaks (BedBase): A set of peaks before merging peaks.
+        merged_peaks (BedBase): A set of peaks after merging peaks.
 
     Returns:
-        A pandas DataFrame in bedbase format with a score column indicating the
+        A BedBase object with a score column indicating the
         peak type: 0 indicates not a peak, 1 indicates a peak before merging,
         2 indicates a peak only after mering. Returns None if the input
         data frames do not align (different bases).
