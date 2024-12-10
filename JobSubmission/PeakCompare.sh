@@ -77,6 +77,7 @@ main() {
     move_log_files
     python3 \
         "${PYTHON_SCRIPTS}/peak_compare.py" \
+        "$(if [[ ${UNMERGED} -eq 1 ]]; then echo "--unmerged"; fi)" \
         "${CHROMOSOME}" \
         "${START}" \
         "${END}" \
