@@ -89,10 +89,10 @@ def is_larger(x: str, y: str) -> bool:
 
 
 def path_does_not_exist(file_path: str, variable_name: str) -> bool:
-    if Path(file_path).is_file():
+    if not Path(file_path).is_file():
         print(
             f"The path given for {variable_name} doesn't exist.",
             f"Please check this path: {file_path}"
         )
-        return False
-    return True
+        return True
+    return False
