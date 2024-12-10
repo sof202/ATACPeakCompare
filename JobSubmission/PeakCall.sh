@@ -131,13 +131,13 @@ get_read_length() {
 
 get_number_of_reads() {
     number_of_reads=$(\
-        grep "total reads" "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_model.txt" | \
+        grep "total tags" "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_model.txt" | \
         grep -Po ": \d+" | \
         grep -Po "\d+" \
     )
     if [[ -f "${CONTROL_FILE}" ]]; then
         number_of_control_reads=$(\
-            grep "total reads" "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_model.txt" | \
+            grep "total tags" "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_model.txt" | \
             grep -Po ": \d+" | \
             grep -Po "\d+" \
         )
