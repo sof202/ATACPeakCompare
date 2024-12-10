@@ -147,6 +147,7 @@ get_number_of_reads() {
 get_coverage_track() {
     macs3 pileup \
         -i "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_filtered.bed" \
+        -f "$(if [[ "${FILE_TYPE}" =~ "PE" ]]; then echo "BEDPE"; else echo "BED"; fi)" \
         --extsize "${fragment_length}" \
         -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_coverage.bdg"
 }
@@ -160,16 +161,19 @@ get_bias_track() {
 
     macs3 pileup \
         -i "${background_file}" \
+        -f "$(if [[ "${FILE_TYPE}" =~ "PE" ]]; then echo "BEDPE"; else echo "BED"; fi)" \
         -B \
         --extsize "$((fragment_length / 2))" \
         -o "${OUTPUT_DIRECTORY}/background_fragment.bdg"
     macs3 pileup \
         -i "${background_file}" \
+        -f "$(if [[ "${FILE_TYPE}" =~ "PE" ]]; then echo "BEDPE"; else echo "BED"; fi)" \
         -B \
         --extsize "$((SMALL_LOCAL_SIZE / 2))" \
         -o "${OUTPUT_DIRECTORY}/background_small_local.bdg"
     macs3 pileup \
         -i "${background_file}" \
+        -f "$(if [[ "${FILE_TYPE}" =~ "PE" ]]; then echo "BEDPE"; else echo "BED"; fi)" \
         -B \
         --extsize "$((LARGE_LOCAL_SIZE / 2))" \
         -o "${OUTPUT_DIRECTORY}/background_large_local.bdg"
@@ -303,13 +307,13 @@ main() {
     get_coverage_track
     if [[ -f "${CONTROL_FILE}" ]]; then
         get_bias_track \
-            "${CONTROL_FILE}" \
+            "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_filtered.bed" \
             "${control_fragment_length}" \
             "${number_of_control_reads}"
         scale_bias_track
     else
         get_bias_track \
-            "${INPUT_FILE}" \
+            "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_filtered.bed" \
             "${fragment_length}" \
             "${number_of_reads}"
     fi
