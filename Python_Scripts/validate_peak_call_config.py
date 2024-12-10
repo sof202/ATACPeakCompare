@@ -28,7 +28,7 @@ def validate_variable_existence(config_variables: dict) -> None:
         variables_to_check.append("MFOLD_LOWER")
         variables_to_check.append("MFOLD_UPPER")
     else:
-        if "CONTROL_FILE" in config_variables:
+        if not is_variable_missing("CONTROL_FILE", config_variables, True):
             variables_to_check.append("NUMBER_OF_CONTROL_READS")
             variables_to_check.append("CONTROL_FRAGMENT_LENGTH")
         variables_to_check.append("READ_LENGTH")
@@ -75,7 +75,7 @@ def any_variables_incorrect(config_variables: dict) -> bool:
         positive_integer_variables.append("MFOLD_UPPER")
         ascending_variables.append(("MFOLD_LOWER", "MFOLD_UPPER"))
     else:
-        if not is_variable_missing("CONTROL_FILE", config_variables):
+        if not is_variable_missing("CONTROL_FILE", config_variables, True):
             positive_integer_variables.append("NUMBER_OF_CONTROL_READS")
             positive_integer_variables.append("CONTROL_FRAGMENT_LENGTH")
         positive_integer_variables.append("READ_LENGTH")
