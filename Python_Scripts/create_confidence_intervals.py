@@ -64,7 +64,7 @@ def generate_pvalue_ci(bias_bedbase: BedBase,
     pvalues_bedbase_ci = BedBaseCI(
         CHR=coverage_bedbase.get("CHR"),
         BASE=coverage_bedbase.get("BASE"),
-        LOWER_SCORE=pd.Series(lower_pvalue),
-        UPPER_SCORE=pd.Series(upper_pvalue)
+        LOWER_SCORE=pd.Series(np.nan_to_num(lower_pvalue)),
+        UPPER_SCORE=pd.Series(np.nan_to_num(upper_pvalue))
     )
     return pvalues_bedbase_ci
