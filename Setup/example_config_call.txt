@@ -56,5 +56,5 @@ LARGE_LOCAL_SIZE=10000
 # DEBUG #
 # ----- #
 
-If you want to keep all intermediate files, set this to 1
+# If you want to keep all intermediate files, set this to 1
 DEBUG_MODE=0
