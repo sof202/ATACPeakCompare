@@ -59,6 +59,11 @@ move_log_files() {
     "${log_directory}/${timestamp}_${SLURM_JOB_ID}_peakcompare.err"
 }
 
+subset_file() {
+  file=$1
+  grep "${CHROMOSOME}" "${file}" > "${TEMP_DIRECTORY}/${file}"
+}
+
 main() {
     config_file=$1
     if [[ -f "${CONDA_EXE%/bin/conda}/etc/profile.d/conda.sh" ]]; then
@@ -75,19 +80,27 @@ main() {
     validate_config_file "${config_file}"
     source "${config_file}" || exit 1
     move_log_files
+    mkdir -p "${TEMP_DIRECTORY}"
+    subset_file "${REFERENCE_MERGED_PEAK_FILE}"
+    subset_file "${REFERENCE_UNMERGED_PEAK_FILE}"
+    subset_file "${REFERENCE_BIAS_TRACK_FILE}"
+    subset_file "${REFERENCE_COVERAGE_TRACK_FILE}"
+    subset_file "${COMPARISON_BIAS_TRACK_FILE}"
+    subset_file "${COMPARISON_COVERAGE_TRACK_FILE}"
+    subset_file "${COMPARISON_PVALUE_FILE}"
     python3 \
         "${PYTHON_SCRIPTS}/peak_compare.py" \
         "$(if [[ ${UNMERGED} -eq 1 ]]; then echo "--unmerged"; fi)" \
         "${CHROMOSOME}" \
         "${START}" \
         "${END}" \
-        "${REFERENCE_MERGED_PEAK_FILE}" \
-        "${REFERENCE_UNMERGED_PEAK_FILE}" \
-        "${REFERENCE_BIAS_TRACK_FILE}" \
-        "${REFERENCE_COVERAGE_TRACK_FILE}" \
-        "${COMPARISON_BIAS_TRACK_FILE}" \
-        "${COMPARISON_COVERAGE_TRACK_FILE}" \
-        "${COMPARISON_PVALUE_FILE}" \
+        "${TEMP_DIRECTORY}/${REFERENCE_MERGED_PEAK_FILE}" \
+        "${TEMP_DIRECTORY}/${REFERENCE_UNMERGED_PEAK_FILE}" \
+        "${TEMP_DIRECTORY}/${REFERENCE_BIAS_TRACK_FILE}" \
+        "${TEMP_DIRECTORY}/${REFERENCE_COVERAGE_TRACK_FILE}" \
+        "${TEMP_DIRECTORY}/${COMPARISON_BIAS_TRACK_FILE}" \
+        "${TEMP_DIRECTORY}/${COMPARISON_COVERAGE_TRACK_FILE}" \
+        "${TEMP_DIRECTORY}/${COMPARISON_PVALUE_FILE}" \
         "${CUTOFF}"
 }
 

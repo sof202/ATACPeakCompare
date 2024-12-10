@@ -44,3 +44,7 @@ COMPARISON_PVALUE_FILE="${COMPARISON_DATASET_OUTPUT_DIRECTORY}/${COMPARISON_SAMP
 # This is the directory the log files will be put in (Metric is printed to the
 # output log file)
 LOG_DIRECTORY="path/to/log/files"
+
+# This is the directory temporary files will be put in (they will be deleted
+# after running)
+TEMP_DIRECTORY="/tmp"
