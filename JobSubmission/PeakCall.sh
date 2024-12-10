@@ -330,5 +330,5 @@ main() {
     get_merged_peaks
 }
 
-if [[ $#1 -ne 1 ]]; then usage; fi
+if [[ $# -ne 1 ]]; then usage; fi
 main "$1"
