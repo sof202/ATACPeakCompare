@@ -42,7 +42,7 @@ validate_config_file() {
     PYTHON_SCRIPTS="$(dirname "${script_location}")/../Python_Scripts"
     PYTHON_SCRIPTS="$(realpath "${PYTHON_SCRIPTS}")"
   python3 \
-    "${PYTHON_SCRIPTS}/validate_config_file_peak_call.py" \
+    "${PYTHON_SCRIPTS}/validate_peak_call_config.py" \
     "${config_file_location}"
   if [[ $? -eq 1 ]]; then
     echo "ERROR: Malformed config file detected."
