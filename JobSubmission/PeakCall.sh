@@ -234,7 +234,7 @@ scale_bias_track() {
 get_p_values() {
     macs3 bdgcmp \
         -t "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_coverage.bdg" \
-        -c "${OUTPUT_DIRECTORY}/bias_track.bdg" \
+        -c "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_bias_track.bdg" \
         -m ppois \
         -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_pvalues.bdg"
 }
