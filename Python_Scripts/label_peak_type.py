@@ -49,9 +49,8 @@ def label_peak_type(unmerged_peaks: BedBase,
 
     Returns:
         A BedBase object with a score column indicating the
-        peak type: 0 indicates not a peak, 1 indicates a peak before merging,
-        2 indicates a peak only after mering. Returns None if the input
-        data frames do not align (different bases).
+        peak type: 0 indicates not a peak, 1 indicates a peak only after
+        merging, 2 indicates a peak before mering.
     """
     if not unmerged_peaks.has_same_positions(merged_peaks):
         raise IncompatabilityError(

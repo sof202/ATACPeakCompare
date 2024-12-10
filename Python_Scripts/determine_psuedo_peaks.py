@@ -41,9 +41,9 @@ def determine_psuedopeaks(comparison_pvalues: BedBase,
 
     # criteria for psuedopeak
     is_pseudopeak = (
-        (passed_ci_comparison == 1) & (peak_type == 1)
+        (passed_ci_comparison == 1) & (peak_type == 2)
     ) | (
-        (pvalue > cutoff) & (peak_type == 2)
+        (pvalue > cutoff) & (peak_type == 1)
     )
     pseudopeaks = BedBase(
         CHR=comparison_pvalues.get("CHR"),
