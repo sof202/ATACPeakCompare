@@ -165,19 +165,19 @@ get_bias_track() {
         -i "${background_file}" \
         -f "${FILE_TYPE}" \
         -B \
-        --extsize "$(echo "scale=5; ${fragment_length}/2" | bc)" \
+        --extsize "$((fragment_length / 2))" \
         -o "${OUTPUT_DIRECTORY}/background_fragment.bdg"
     macs3 pileup \
         -i "${background_file}" \
         -f "${FILE_TYPE}" \
         -B \
-        --extsize "$(echo "scale=5; ${SMALL_LOCAL_SIZE}/2" | bc)" \
+        --extsize "$((SMALL_LOCAL_SIZE / 2))" \
         -o "${OUTPUT_DIRECTORY}/background_small_local.bdg"
     macs3 pileup \
         -i "${background_file}" \
         -f "${FILE_TYPE}" \
         -B \
-        --extsize "$(echo "scale=5; ${LARGE_LOCAL_SIZE}/2" | bc)" \
+        --extsize "$((LARGE_LOCAL_SIZE / 2))" \
         -o "${OUTPUT_DIRECTORY}/background_large_local.bdg"
 
     macs3 bdgopt \
