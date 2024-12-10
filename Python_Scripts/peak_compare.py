@@ -17,6 +17,12 @@ def main(args: argparse.Namespace) -> None:
         print("start and end must be integers")
         sys.exit(1)
 
+    try:
+        cutoff = float(args.cutoff)
+    except ValueError:
+        print("cutoff must be a floating point number")
+        sys.exit(1)
+
     reference_merged_peaks = convert_narrow_peak_to_bedbase(
         Bed.read_from_file(args.reference_merged_peaks_file),
         chromosome,
@@ -79,7 +85,7 @@ def main(args: argparse.Namespace) -> None:
         comparison_pvalue_track,
         compared_pvalues,
         reference_labelled_peaks,
-        args.cutoff
+        cutoff
     )
     if args.unmerged:
         metric = calculate_metric(
