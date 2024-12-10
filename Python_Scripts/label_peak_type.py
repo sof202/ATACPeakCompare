@@ -25,7 +25,7 @@ def convert_narrow_peak_to_bedbase(peak_data: Bed,
         CHR=peak_data.get("CHR"),
         START=peak_data.get("START"),
         END=peak_data.get("END"),
-        SCORE=pd.Series(np.zeros(len(peak_data.get("START"))))
+        SCORE=pd.Series(np.ones(len(peak_data.get("START"))))
     )
     peak_data = extract_bedbase_region(peak_data, chromosome, start, end)
 
