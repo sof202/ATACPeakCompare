@@ -49,6 +49,7 @@ def validate_variable_existence(config_variables: dict) -> None:
         quiet=True
     )
     if cutoff_missing and average_peak_missing:
+        variable_missing = True
         print(
             "You must have one of CUTOFF or AVERAGE_PEAK_LENGTH defined in",
             "the config file."
