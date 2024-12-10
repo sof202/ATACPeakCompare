@@ -4,6 +4,7 @@ from determine_metric import calculate_metric
 from determine_psuedo_peaks import compare_pvalue_ci, determine_psuedopeaks
 from extract_region import extract_bedbase_region
 from label_peak_type import label_peak_type, convert_narrow_peak_to_bedbase
+from IO import BedGraph, Bed
 
 
 def main(args: argparse.Namespace) -> None:
@@ -12,43 +13,43 @@ def main(args: argparse.Namespace) -> None:
     end = args.end
 
     reference_merged_peaks = convert_narrow_peak_to_bedbase(
-        args.reference_merged_peaks_file,
+        Bed.read_from_file(args.reference_merged_peaks_file),
         chromosome,
         start,
         end
     )
     reference_unmerged_peaks = convert_narrow_peak_to_bedbase(
-        args.reference_unmerged_peaks_file,
+        Bed.read_from_file(args.reference_unmerged_peaks_file),
         chromosome,
         start,
         end
     )
     reference_bias_track = extract_bedbase_region(
-        args.reference_bias_track_file,
+        BedGraph.read_from_file(args.reference_bias_track_file),
         chromosome,
         start,
         end
     )
     reference_coverage_track = extract_bedbase_region(
-        args.reference_coverage_track_file,
+        BedGraph.read_from_file(args.reference_coverage_track_file),
         chromosome,
         start,
         end
     )
     comparison_bias_track = extract_bedbase_region(
-        args.comparison_bias_track_file,
+        BedGraph.read_from_file(args.comparison_bias_track_file),
         chromosome,
         start,
         end
     )
     comparison_coverage_track = extract_bedbase_region(
-        args.comparison_coverage_track_file,
+        BedGraph.read_from_file(args.comparison_coverage_track_file),
         chromosome,
         start,
         end
     )
     comparison_pvalue_track = extract_bedbase_region(
-        args.comparison_pvalue_file,
+        BedGraph.read_from_file(args.comparison_pvalue_file),
         chromosome,
         start,
         end
