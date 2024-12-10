@@ -78,7 +78,6 @@ remove_duplicates() {
 build_model() {
     macs3 predictd \
         -i "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_filtered.bed" \
-        -f "${FILE_TYPE}" \
         -g "${GENOME_SIZE}" \
         -m "${MFOLD_LOWER}" "${MFOLD_UPPER}" \
         --outdir "${OUTPUT_DIRECTORY}" 2> \
@@ -87,7 +86,6 @@ build_model() {
     if [[ -f "${CONTROL_FILE}" ]]; then
         macs3 predictd \
             -i "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_control_filtered.bed" \
-            -f "${FILE_TYPE}" \
             -g "${GENOME_SIZE}" \
             -m "${MFOLD_LOWER}" "${MFOLD_UPPER}" \
             --outdir "${OUTPUT_DIRECTORY}" 2> \
@@ -149,7 +147,6 @@ get_number_of_reads() {
 get_coverage_track() {
     macs3 pileup \
         -i "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_filtered.bed" \
-        -f "${FILE_TYPE}" \
         --extsize "${fragment_length}" \
         -o "${OUTPUT_DIRECTORY}/${SAMPLE_NAME}_coverage.bdg"
 }
@@ -163,19 +160,16 @@ get_bias_track() {
 
     macs3 pileup \
         -i "${background_file}" \
-        -f "${FILE_TYPE}" \
         -B \
         --extsize "$((fragment_length / 2))" \
         -o "${OUTPUT_DIRECTORY}/background_fragment.bdg"
     macs3 pileup \
         -i "${background_file}" \
-        -f "${FILE_TYPE}" \
         -B \
         --extsize "$((SMALL_LOCAL_SIZE / 2))" \
         -o "${OUTPUT_DIRECTORY}/background_small_local.bdg"
     macs3 pileup \
         -i "${background_file}" \
-        -f "${FILE_TYPE}" \
         -B \
         --extsize "$((LARGE_LOCAL_SIZE / 2))" \
         -o "${OUTPUT_DIRECTORY}/background_large_local.bdg"
