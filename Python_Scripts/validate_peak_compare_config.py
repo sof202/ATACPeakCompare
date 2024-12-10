@@ -40,26 +40,26 @@ def validate_variable_existence(config_variables: dict) -> None:
         sys.exit(1)
 
 
-def any_variables_incorrect(config_variables: dict) -> bool:
-    variable_incorrect = False
+def all_variables_correct(config_variables: dict) -> bool:
+    variables_correct = True
     positive_integer_variables = [
         "START",
         "END"
     ]
     for variable in positive_integer_variables:
-        variable_incorrect = variable_incorrect or is_positive_integer(
+        variables_correct = variables_correct and is_positive_integer(
             config_variables[variable],
             variable
         )
-    variable_incorrect = variable_incorrect or is_positive_float(
+    variables_correct = variables_correct and is_positive_float(
         config_variables["CUTOFF"],
         "CUTOFF"
     )
-    variable_incorrect = variable_incorrect or is_larger(
+    variables_correct = variables_correct and is_larger(
         config_variables["START"],
         config_variables["END"]
     )
-    return variable_incorrect
+    return variables_correct
 
 
 def any_file_paths_missing(config_variables: dict) -> bool:
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     config_variables = get_config_variables(args.file_path)
     validate_variable_existence(config_variables)
     config_malformed = False
-    config_malformed = any_variables_incorrect(config_variables)
+    config_malformed = not all_variables_correct(config_variables)
     config_malformed = config_malformed or any_file_paths_missing(
         config_variables)
     if config_malformed:
