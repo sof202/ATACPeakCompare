@@ -121,8 +121,8 @@ main() {
         "${CUTOFF}"
     fi
 
-    rm "${TEMP_DIRECTORY}/${REFERENCE_SAMPLE_NAME}*.bdg" \
-      "${TEMP_DIRECTORY}/${COMPARISON_SAMPLE_NAME}*.bdg"
+    rm "${TEMP_DIRECTORY}/${REFERENCE_SAMPLE_NAME}"*.bdg \
+      "${TEMP_DIRECTORY}/${COMPARISON_SAMPLE_NAME}"*.bdg
 }
 
 if [[ $# -ne 1 ]]; then usage; fi
