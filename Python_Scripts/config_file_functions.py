@@ -88,7 +88,7 @@ def is_larger(x: str, y: str) -> bool:
     return True
 
 
-def path_exists(file_path: str, variable_name: str) -> bool:
+def path_does_not_exist(file_path: str, variable_name: str) -> bool:
     if Path(file_path).is_file():
         print(
             f"The path given for {variable_name} doesn't exist.",
@@ -96,18 +96,3 @@ def path_exists(file_path: str, variable_name: str) -> bool:
         )
         return False
     return True
-
-
-def any_file_paths_missing(config_variables: dict) -> bool:
-    file_missing = False
-    paths_to_check = [
-        "OUTPUT_DIRECTORY",
-        "INPUT_FILE",
-    ]
-    if not is_variable_missing("CONTROL_FILE", config_variables):
-        paths_to_check.append("CONTROL_FILE")
-    for path in paths_to_check:
-        file_missing = file_missing or path_exists(
-            config_variables[path], path
-        )
-    return file_missing

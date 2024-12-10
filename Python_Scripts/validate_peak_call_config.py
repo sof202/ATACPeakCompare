@@ -6,7 +6,7 @@ from config_file_functions import (
     is_positive_integer,
     is_larger,
     is_variable_missing,
-    path_exists
+    path_does_not_exist
 )
 
 
@@ -100,10 +100,10 @@ def any_file_paths_missing(config_variables: dict) -> bool:
     paths_to_check = [
         "INPUT_FILE"
     ]
-    if not is_variable_missing("CONTROL_FILE", config_variables):
+    if not is_variable_missing("CONTROL_FILE", config_variables, quiet=True):
         paths_to_check.append("CONTROL_FILE")
     for path in paths_to_check:
-        file_missing = file_missing or path_exists(
+        file_missing = file_missing or path_does_not_exist(
             config_variables[path], path
         )
     return file_missing
