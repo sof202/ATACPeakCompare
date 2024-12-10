@@ -70,7 +70,7 @@ def all_variables_correct(config_variables: dict) -> bool:
     ascending_variables = [
         ("SMALL_LOCAL_SIZE", "LARGE_LOCAL_SIZE")
     ]
-    if config_variables["BUILD_MODEL"] == 1:
+    if config_variables["BUILD_MODEL"] == "1":
         positive_integer_variables.append("MFOLD_LOWER")
         positive_integer_variables.append("MFOLD_UPPER")
         ascending_variables.append(("MFOLD_LOWER", "MFOLD_UPPER"))
