@@ -30,7 +30,7 @@ def main(args: argparse.Namespace) -> None:
         end
     )
     reference_coverage_track = extract_bedbase_region(
-        args.reference_coverage,
+        args.reference_coverage_track_file,
         chromosome,
         start,
         end
@@ -42,7 +42,7 @@ def main(args: argparse.Namespace) -> None:
         end
     )
     comparison_coverage_track = extract_bedbase_region(
-        args.comparison_coverage,
+        args.comparison_coverage_track_file,
         chromosome,
         start,
         end
@@ -117,12 +117,12 @@ if __name__ == "__main__":
               "inspect")
     )
     parser.add_argument(
-        "reference_merged_peak_file",
+        "reference_merged_peaks_file",
         help=("The narrow peak file from reference dataset where peaks are"
               "merged.")
     )
     parser.add_argument(
-        "reference_unmerged_peak_file",
+        "reference_unmerged_peaks_file",
         help=("The narrow peak file from reference dataset where peaks are"
               "not merged.")
     )
