@@ -104,6 +104,9 @@ main() {
         "${TEMP_DIRECTORY}/${COMPARISON_COVERAGE_TRACK_FILE}" \
         "${TEMP_DIRECTORY}/${COMPARISON_PVALUE_FILE}" \
         "${CUTOFF}"
+
+    rm "${TEMP_DIRECTORY}/${REFERENCE_SAMPLE_NAME}*.bed" \
+      "${TEMP_DIRECTORY}/${COMPARISON_SAMPLE_NAME}*.bed"
 }
 
 if [[ $#1 -ne 1 ]]; then usage; fi
