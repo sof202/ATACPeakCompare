@@ -56,8 +56,7 @@ def is_variable_missing(variable: str,
 def is_positive_float(x: str, variable_name: str) -> bool:
     message = f"{variable_name} must be a positive floating point number."
     try:
-        float(x)
-        if x > 0:
+        if float(x) > 0:
             return True
         else:
             print(message)
