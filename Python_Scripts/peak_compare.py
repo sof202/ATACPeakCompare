@@ -5,12 +5,17 @@ from determine_psuedo_peaks import compare_pvalue_ci, determine_psuedopeaks
 from extract_region import extract_bedbase_region
 from label_peak_type import label_peak_type, convert_narrow_peak_to_bedbase
 from IO import BedGraph, Bed
+import sys
 
 
 def main(args: argparse.Namespace) -> None:
     chromosome = args.chromosome
-    start = args.start
-    end = args.end
+    try:
+        start = int(args.start)
+        end = int(args.end)
+    except ValueError:
+        print("start and end must be integers")
+        sys.exit(1)
 
     reference_merged_peaks = convert_narrow_peak_to_bedbase(
         Bed.read_from_file(args.reference_merged_peaks_file),
