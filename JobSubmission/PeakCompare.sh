@@ -81,6 +81,7 @@ main() {
     source "${config_file}" || exit 1
     move_log_files
     mkdir -p "${TEMP_DIRECTORY}"
+
     subset_file "${REFERENCE_MERGED_PEAK_FILE}"
     subset_file "${REFERENCE_UNMERGED_PEAK_FILE}"
     subset_file "${REFERENCE_BIAS_TRACK_FILE}"
@@ -88,6 +89,7 @@ main() {
     subset_file "${COMPARISON_BIAS_TRACK_FILE}"
     subset_file "${COMPARISON_COVERAGE_TRACK_FILE}"
     subset_file "${COMPARISON_PVALUE_FILE}"
+
     python3 \
         "${PYTHON_SCRIPTS}/peak_compare.py" \
         "$(if [[ ${UNMERGED} -eq 1 ]]; then echo "--unmerged"; fi)" \
