@@ -109,5 +109,5 @@ main() {
       "${TEMP_DIRECTORY}/${COMPARISON_SAMPLE_NAME}*.bed"
 }
 
-if [[ $#1 -ne 1 ]]; then usage; fi
+if [[ $# -ne 1 ]]; then usage; fi
 main "$1"
