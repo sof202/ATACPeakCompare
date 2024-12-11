@@ -206,42 +206,6 @@ class BedBase(GenomicData):
             return True
         return False
 
-    @classmethod
-    def read_from_file(cls, file_path: str) -> Optional["BedBase"]:
-        """
-        Reads a bedbase file into a BedBase object.
-
-        Args:
-            file_path (str): The path to the bedbase file.
-
-        Returns:
-            Optional[BedBase]: The BedBase object containing the bedbase data,
-            or None if an error occurred.
-        """
-        try:
-            bedbase = pd.read_table(file_path, sep="\t")
-            if bedbase.shape[1] != 3:
-                raise ValueError(f"Bedbase file at {file_path}"
-                                 " does not have exactly 3 columns.")
-            bedbase.columns = ["CHR", "BASE", "SCORE"]
-            return cls(
-                bedbase["CHR"],
-                bedbase["BASE"],
-                bedbase["SCORE"]
-            )
-        except (FileNotFoundError, IOError):
-            print(f"{file_path} does not exist or could not be read.")
-            return None
-        except IsADirectoryError:
-            print(f"{file_path} is a directory.")
-            return None
-        except PermissionError:
-            print(f"Permission denied for {file_path}")
-            return None
-        except OSError as e:
-            print(f"OS error occurred: {e}")
-            return None
-
 
 class Bed(GenomicData):
     """
