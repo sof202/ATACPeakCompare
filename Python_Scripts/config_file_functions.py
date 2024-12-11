@@ -53,6 +53,14 @@ def is_variable_missing(variable: str,
     return False
 
 
+def begins_with(value: str, begin_string: str, variable_name: str) -> bool:
+    message = f"{variable_name} must start with {begin_string}"
+    if value.startswith(begin_string):
+        return True
+    print(message)
+    return False
+
+
 def is_positive_float(x: str, variable_name: str) -> bool:
     message = f"{variable_name} must be a positive floating point number."
     try:

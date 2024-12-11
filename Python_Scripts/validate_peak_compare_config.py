@@ -1,6 +1,7 @@
 import argparse
 import sys
 from config_file_functions import (
+    begins_with,
     validate_eol_format,
     get_config_variables,
     is_positive_integer,
@@ -58,6 +59,11 @@ def all_variables_correct(config_variables: dict) -> bool:
     variables_correct = variables_correct and is_larger(
         config_variables["START"],
         config_variables["END"]
+    )
+    variables_correct = variables_correct and begins_with(
+        value=config_variables["CHROMOSOME"],
+        begin_string="chr",
+        variable_name="CHROMOSOME"
     )
     return variables_correct
 
