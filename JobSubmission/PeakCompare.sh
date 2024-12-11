@@ -94,6 +94,7 @@ main() {
       python3 \
         "${PYTHON_SCRIPTS}/peak_compare.py" \
         --unmerged \
+        --significance "${SIGNIFICANCE}" \
         "${CHROMOSOME}" \
         "${START}" \
         "${END}" \
@@ -108,6 +109,7 @@ main() {
     else
       python3 \
         "${PYTHON_SCRIPTS}/peak_compare.py" \
+        --significance "${SIGNIFICANCE}" \
         "${CHROMOSOME}" \
         "${START}" \
         "${END}" \

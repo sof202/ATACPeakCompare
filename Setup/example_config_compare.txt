@@ -14,6 +14,11 @@ END=1000
 # meaning 5 is actually 1e-5.
 CUTOFF=5
 
+# This is the signficance used for confidence intervals. Using a higher value
+# leads to tighter confidence intervals, leading to being more stringent on
+# pseudopeaks.
+SIGNIFICANCE=0.1
+
 # If you want to know what the metric evaluates to without factoring in peaks
 # that are called due to MACS3 merging close peaks, set this to 1.
 UNMERGED=0
