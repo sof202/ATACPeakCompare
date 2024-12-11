@@ -6,8 +6,9 @@ from typing import NamedTuple
 
 
 class ConfidenceInterval(NamedTuple):
-    lower: np.ndarray
-    upper: np.ndarray
+    def __init__(self, lower: np.ndarray, upper: np.ndarray):
+        self.lower = lower
+        self.upper = upper
 
 
 def calculate_lambda_ci(lambdas: np.ndarray,
