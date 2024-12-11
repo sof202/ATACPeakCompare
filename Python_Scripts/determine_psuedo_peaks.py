@@ -3,6 +3,20 @@ from IO import BedBase, BedBaseCI, IncompatabilityError
 
 def compare_pvalue_ci(reference_pvalue_ci: BedBaseCI,
                       comparison_pvalue_ci: BedBaseCI) -> BedBase:
+    """
+    Compares the smallest pvalue of the reference dataset with the largest
+    from the comparison dataset. This is essential knowledge required for
+    determining pseudopeaks.
+
+    Args:
+        reference_pvalue_ci: BedBaseCI object containing the reference
+            dataset.
+        comparison_pvalue_ci: BedBaseCI object containing the comparison
+            dataset.
+
+    Returns:
+        A BedBase object containing the comparison dataset.
+    """
     if not reference_pvalue_ci.has_same_positions(comparison_pvalue_ci):
         raise IncompatabilityError(
             "Reference and comparison files must be over the same region.")
@@ -25,6 +39,20 @@ def determine_psuedopeaks(comparison_pvalues: BedBase,
                           compared_pvalues: BedBase,
                           reference_labelled_peaks: BedBase,
                           cutoff: float) -> BedBase:
+    """
+    Determines the pseudopeaks from the comparison dataset. For more
+    information on pseudopeaks, go to the documentation.
+
+    Args:
+        comparison_pvalues: BedBase object containing the comparison dataset.
+        compared_pvalues: BedBase object containing the comparison dataset.
+        reference_labelled_peaks: BedBase object containing the reference
+            dataset.
+        cutoff: The cutoff for determining whether a peak is a pseudopeak.
+
+    Returns:
+        A BedBase object containing the pseudopeaks.
+    """
     if not comparison_pvalues.has_same_positions(compared_pvalues):
         raise IncompatabilityError(
             "All BedBase files must be over the same region.")

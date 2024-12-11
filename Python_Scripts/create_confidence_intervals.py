@@ -6,6 +6,10 @@ from typing import NamedTuple
 
 
 class ConfidenceInterval(NamedTuple):
+    """
+    Represents a set of confidence intervals.
+    """
+
     def __init__(self, lower: np.ndarray, upper: np.ndarray):
         self.lower = lower
         self.upper = upper
@@ -14,6 +18,20 @@ class ConfidenceInterval(NamedTuple):
 def calculate_lambda_ci(lambdas: np.ndarray,
                         significance: float,
                         window_size: int = 50) -> ConfidenceInterval:
+    """
+    Calculates confidence intervals for lambda values, considering variance in
+    surrounding values, handling edge cases correctly.
+
+    Args:
+        lambdas: A NumPy array of lambda values.
+        significance: The significance level for the confidence interval
+        (e.g., 0.95 for a 95% CI).
+        window_size: The size of the sliding window to calculate variance.
+
+    Returns:
+        A ConfidenceInterval object containing the lower and upper bounds of
+        the confidence interval.
+    """
     variances = np.zeros_like(lambdas)
     sample_sizes = np.zeros_like(lambdas)
     for i in range(len(lambdas)):
@@ -56,6 +74,21 @@ def generate_pvalue_ci(bias_bedbase: BedBase,
                        coverage_bedbase: BedBase,
                        significance: float,
                        window_size: int = 50) -> BedBaseCI:
+    """
+    Generates a confidence interval for the pvalue of the coverage track
+    given the bias track.
+
+    Args:
+        bias_bedbase: A BedBase object containing the bias track.
+        coverage_bedbase: A BedBase object containing the coverage track.
+        significance: The significance level for the confidence interval
+        (e.g., 0.95 for a 95% CI).
+        window_size: The size of the sliding window to calculate variance.
+
+    Returns:
+        A BedBaseCI object containing the lower and upper bounds of the
+        confidence interval.
+    """
     if not bias_bedbase.has_same_positions(coverage_bedbase):
         raise IncompatabilityError(
             "Bias track and coverage track are over different regions.")
