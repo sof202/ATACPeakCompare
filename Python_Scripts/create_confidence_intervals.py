@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from IO import BedBase, BedBaseCI, IncompatabilityError
-from scipy.stats import poisson, chi2
+from scipy.stats import poisson, norm
 from typing import NamedTuple
 
 
@@ -12,8 +12,15 @@ class ConfidenceInterval(NamedTuple):
 
 def calculate_lambda_ci(lambdas: np.ndarray,
                         significance: float) -> ConfidenceInterval:
-    lower = chi2.ppf(significance/2, 2*lambdas)/2
-    upper = chi2.ppf(1-significance/2, 2*(lambdas+1))/2
+    variance = np.var(lambdas)
+    standard_error = np.sqrt(variance / len(lambdas))
+    z_a = norm.cdf(significance)
+    lower = lambdas - z_a * standard_error
+    upper = lambdas + z_a * standard_error
+
+    # Poisson distribution doesn't take kindly to non-positive lambdas
+    if lower <= 0:
+        lower = np.min(lambdas)
     return ConfidenceInterval(lower=lower, upper=upper)
 
 
