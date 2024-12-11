@@ -9,10 +9,8 @@ class ConfidenceInterval(NamedTuple):
     """
     Represents a set of confidence intervals.
     """
-
-    def __init__(self, lower: np.ndarray, upper: np.ndarray):
-        self.lower = lower
-        self.upper = upper
+    lower: np.ndarray
+    upper: np.ndarray
 
 
 def calculate_lambda_ci(lambdas: np.ndarray,
