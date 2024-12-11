@@ -15,14 +15,18 @@ def calculate_lambda_ci(lambdas: np.ndarray,
                         significance: float,
                         window_size: int = 50) -> ConfidenceInterval:
     variances = np.zeros_like(lambdas)
+    sample_sizes = np.zeros_like(lambdas)
     for i in range(len(lambdas)):
         start = max(0, i - window_size // 2)
         end = min(len(lambdas), i + window_size // 2 + 1)
-        variances[i] = np.var(lambdas[start:end])
-    standard_error = np.sqrt(variances / window_size)
+        window = lambdas[start:end]
+        variances[i] = np.var(window)
+        sample_sizes[i] = len(window)
+
+    standard_errors = np.sqrt(variances / sample_sizes)
     z_a = norm.ppf(significance)
-    lower = lambdas - z_a * standard_error
-    upper = lambdas + z_a * standard_error
+    lower = lambdas - z_a * standard_errors
+    upper = lambdas + z_a * standard_errors
 
     # Poisson distribution doesn't take kindly to non-positive lambdas
     lower = np.clip(lower, a_min=np.min(lambdas), a_max=None)
