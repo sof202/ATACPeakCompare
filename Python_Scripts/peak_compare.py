@@ -10,24 +10,8 @@ import sys
 
 def main(args: argparse.Namespace) -> None:
     chromosome = args.chromosome
-    try:
-        start = int(args.start)
-        end = int(args.end)
-    except ValueError:
-        print("start and end must be integers")
-        sys.exit(1)
-
-    try:
-        cutoff = float(args.cutoff)
-    except ValueError:
-        print("cutoff must be a floating point number")
-        sys.exit(1)
-
-    try:
-        significance = float(args.significance)
-    except ValueError:
-        print("significance must be a floating point number")
-        sys.exit(1)
+    start = args.start
+    end = args.end
 
     reference_merged_peaks = convert_narrow_peak_to_bedbase(
         Bed.read_from_file(args.reference_merged_peaks_file),
@@ -78,12 +62,12 @@ def main(args: argparse.Namespace) -> None:
     reference_pvalue_ci = generate_pvalue_ci(
         reference_bias_track,
         reference_coverage_track,
-        significance
+        args.significance
     )
     comparison_pvalue_ci = generate_pvalue_ci(
         comparison_bias_track,
         comparison_coverage_track,
-        significance
+        args.significance
     )
     compared_pvalues = compare_pvalue_ci(
         reference_pvalue_ci,
@@ -93,7 +77,7 @@ def main(args: argparse.Namespace) -> None:
         comparison_pvalue_track,
         compared_pvalues,
         reference_labelled_peaks,
-        cutoff
+        args.cutoff
     )
     if args.unmerged:
         metric = calculate_metric(
@@ -124,7 +108,9 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--signficance",
-        nargs=1,
+        nargs='?',
+        const=0.1,
+        type=float,
         help=("The significance used when calculating confidence intervals.")
     )
     parser.add_argument(
@@ -133,11 +119,13 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "start",
+        type=int,
         help=("The base pair position at the start of the region you wish to "
               "inspect")
     )
     parser.add_argument(
         "end",
+        type=int,
         help=("The base pair position at the end of the region you wish to "
               "inspect")
     )
@@ -173,6 +161,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "cutoff",
+        type=float,
         help="The cutoff used to call peaks in the reference dataset."
     )
     args = parser.parse_args()
