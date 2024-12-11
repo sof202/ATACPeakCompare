@@ -23,6 +23,12 @@ def main(args: argparse.Namespace) -> None:
         print("cutoff must be a floating point number")
         sys.exit(1)
 
+    try:
+        significance = float(args.significance)
+    except ValueError:
+        print("significance must be a floating point number")
+        sys.exit(1)
+
     reference_merged_peaks = convert_narrow_peak_to_bedbase(
         Bed.read_from_file(args.reference_merged_peaks_file),
         chromosome,
@@ -71,11 +77,13 @@ def main(args: argparse.Namespace) -> None:
     )
     reference_pvalue_ci = generate_pvalue_ci(
         reference_bias_track,
-        reference_coverage_track
+        reference_coverage_track,
+        significance
     )
     comparison_pvalue_ci = generate_pvalue_ci(
         comparison_bias_track,
-        comparison_coverage_track
+        comparison_coverage_track,
+        significance
     )
     compared_pvalues = compare_pvalue_ci(
         reference_pvalue_ci,
@@ -113,6 +121,11 @@ if __name__ == "__main__":
         action="store_true",
         help=("Set this if you want to discount peaks that are a result of "
               "merging when calculating the metric.")
+    )
+    parser.add_argument(
+        "--signficance",
+        nargs=1,
+        help=("The significance used when calculating confidence intervals.")
     )
     parser.add_argument(
         "chromosome",
