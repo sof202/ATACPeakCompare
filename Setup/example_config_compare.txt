@@ -17,7 +17,7 @@ CUTOFF=5
 # This is the signficance used for confidence intervals. Using a higher value
 # leads to tighter confidence intervals, leading to being more stringent on
 # pseudopeaks.
-SIGNIFICANCE=0.1
+SIGNIFICANCE=0.95
 
 # If you want to know what the metric evaluates to without factoring in peaks
 # that are called due to MACS3 merging close peaks, set this to 1.

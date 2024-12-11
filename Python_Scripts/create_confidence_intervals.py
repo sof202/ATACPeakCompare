@@ -14,7 +14,7 @@ def calculate_lambda_ci(lambdas: np.ndarray,
                         significance: float) -> ConfidenceInterval:
     variance = np.var(lambdas)
     standard_error = np.sqrt(variance / len(lambdas))
-    z_a = norm.cdf(significance)
+    z_a = norm.ppf(significance)
     lower = lambdas - z_a * standard_error
     upper = lambdas + z_a * standard_error
 

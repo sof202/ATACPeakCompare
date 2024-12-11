@@ -109,7 +109,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--signficance",
         nargs='?',
-        const=0.1,
+        const=0.95,
         type=float,
         help=("The significance used when calculating confidence intervals.")
     )
