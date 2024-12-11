@@ -95,6 +95,7 @@ main() {
         "${PYTHON_SCRIPTS}/peak_compare.py" \
         --unmerged \
         --significance "${SIGNIFICANCE}" \
+        --window_size "${WINDOW_SIZE}" \
         "${CHROMOSOME}" \
         "${START}" \
         "${END}" \
@@ -110,6 +111,7 @@ main() {
       python3 \
         "${PYTHON_SCRIPTS}/peak_compare.py" \
         --significance "${SIGNIFICANCE}" \
+        --window_size "${WINDOW_SIZE}" \
         "${CHROMOSOME}" \
         "${START}" \
         "${END}" \

@@ -12,16 +12,20 @@ class ConfidenceInterval(NamedTuple):
 
 
 def calculate_lambda_ci(lambdas: np.ndarray,
-                        significance: float) -> ConfidenceInterval:
-    variance = np.var(lambdas)
-    standard_error = np.sqrt(variance / len(lambdas))
+                        significance: float,
+                        window_size: int = 50) -> ConfidenceInterval:
+    variances = np.zeros_like(lambdas)
+    for i in range(len(lambdas)):
+        start = max(0, i - window_size // 2)
+        end = min(len(lambdas), i + window_size // 2 + 1)
+        variances[i] = np.var(lambdas[start:end])
+    standard_error = np.sqrt(variances / window_size)
     z_a = norm.ppf(significance)
     lower = lambdas - z_a * standard_error
     upper = lambdas + z_a * standard_error
 
     # Poisson distribution doesn't take kindly to non-positive lambdas
-    if lower <= 0:
-        lower = np.min(lambdas)
+    lower = np.clip(lower, a_min=np.min(lambdas), a_max=None)
     return ConfidenceInterval(lower=lower, upper=upper)
 
 
@@ -46,12 +50,17 @@ def calculate_pavlue(reads: np.ndarray, lambdas: np.ndarray) -> np.ndarray:
 
 def generate_pvalue_ci(bias_bedbase: BedBase,
                        coverage_bedbase: BedBase,
-                       significance: float) -> BedBaseCI:
+                       significance: float,
+                       window_size: int = 50) -> BedBaseCI:
     if not bias_bedbase.has_same_positions(coverage_bedbase):
         raise IncompatabilityError(
             "Bias track and coverage track are over different regions.")
 
-    bias_bedbase_ci = generate_bias_track_ci(bias_bedbase, significance)
+    bias_bedbase_ci = generate_bias_track_ci(
+        bias_bedbase,
+        significance,
+        window_size
+    )
 
     # A higher lambda in the poisson distribution will cause the same number
     # of reads to generate a lower pvalue. To stay consistent with naming, we

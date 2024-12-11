@@ -62,12 +62,14 @@ def main(args: argparse.Namespace) -> None:
     reference_pvalue_ci = generate_pvalue_ci(
         reference_bias_track,
         reference_coverage_track,
-        args.significance
+        args.significance,
+        args.window_size
     )
     comparison_pvalue_ci = generate_pvalue_ci(
         comparison_bias_track,
         comparison_coverage_track,
-        args.significance
+        args.significance,
+        args.window_size
     )
     compared_pvalues = compare_pvalue_ci(
         reference_pvalue_ci,
@@ -111,6 +113,13 @@ if __name__ == "__main__":
         nargs='?',
         const=0.95,
         type=float,
+        help=("The significance used when calculating confidence intervals.")
+    )
+    parser.add_argument(
+        "--window_size",
+        nargs='?',
+        const=50,
+        type=int,
         help=("The significance used when calculating confidence intervals.")
     )
     parser.add_argument(

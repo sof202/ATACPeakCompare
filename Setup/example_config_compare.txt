@@ -19,6 +19,10 @@ CUTOFF=5
 # pseudopeaks.
 SIGNIFICANCE=0.95
 
+# This is the window to use when calculating confidence intervals for the
+# bias track.
+WINDOW_SIZE=50
+
 # If you want to know what the metric evaluates to without factoring in peaks
 # that are called due to MACS3 merging close peaks, set this to 1.
 UNMERGED=0
