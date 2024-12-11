@@ -20,7 +20,9 @@ CUTOFF=5
 SIGNIFICANCE=0.95
 
 # This is the window to use when calculating confidence intervals for the
-# bias track.
+# bias track. A larger window will generally lead to poor confidence intervals.
+# In general this value should be somewhere between a quarter and half of the
+# fragment length of each sample.
 WINDOW_SIZE=50
 
 # If you want to know what the metric evaluates to without factoring in peaks
