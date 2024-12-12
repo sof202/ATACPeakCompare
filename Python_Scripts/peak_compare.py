@@ -5,7 +5,6 @@ from determine_psuedo_peaks import compare_pvalue_ci, determine_psuedopeaks
 from extract_region import extract_bedbase_region
 from label_peak_type import label_peak_type, convert_narrow_peak_to_bedbase
 from IO import BedGraph, Bed
-import sys
 
 
 def main(args: argparse.Namespace) -> None:
