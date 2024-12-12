@@ -50,10 +50,12 @@ def calculate_lambda_ci(lambdas: np.ndarray,
 
 
 def generate_bias_track_ci(bias_bedbase: BedBase,
-                           significance: float) -> BedBaseCI:
+                           significance: float,
+                           window_size: int = 50) -> BedBaseCI:
     lambda_ci = calculate_lambda_ci(
         lambdas=bias_bedbase.get("SCORE").to_numpy(),
-        significance=significance
+        significance=significance,
+        window_size=window_size
     )
     bias_bedbase_ci = BedBaseCI(
         CHR=bias_bedbase.get("CHR"),
