@@ -74,3 +74,10 @@ most stringent cutoff that gives you a certain average peak length. If you have
 your own idea here, a file is put in your chosen output directory under
 `(sample_name)_cutoff_analysis.txt`. The pipeline doesn't use elbow analysis
 as this is hard to automate ("How do you define a dramatic change?").
+
+## Time
+
+The time MACS takes to peak call will vary with the number of reads that you
+have, however the process is usually very fast. For a dataset with 11,000,000
+reads the total time taken was roughly 5 minutes 
+(where the cpu was Intel(R) Xeon(R) CPU E5-2640 v3 @ 2.60GHz).
