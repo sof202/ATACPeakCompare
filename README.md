@@ -24,13 +24,18 @@ In order to run the scripts included in this repository, you will need
 to complete the below required steps:
 
 1) Download all [required software](#software-requirements)
-2) Fill in the example config file found in `.../Setup` and place this file
-in a memorable location. Be sure to read the comments to avoid confusion around
-control files. Each configuration will enable the processing of a single sample.
-If you wish to run the pipeline on multiple samples, consider creating multiple
-config files by copying the template.
-3) Run the MACS pipeline with SLURM: 
-`sbatch .../JobSubmission/PeakCall.sh path/to/config.txt`
+2) Copy the config templates found in `Setup` and place these files in
+memorable locations (recommended: next to the data you are processing). For the
+most part, parameters are explained in these templates. However additional
+information is given in the documentation. You will likely want configuration
+files for each of your datasets so that you can remember what parameters were
+used.
+3) Run the `PeakCall.sh` script for each of your datasets
+4) Run the `PeakCompare.sh` script.
+5) Interpret the metric.
+
+For additional information it is recommended that you read the
+[documentation](https://sof202.github.io/PeakCompare/).
 
 ## Software Requirements
 
