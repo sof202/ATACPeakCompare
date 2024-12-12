@@ -1,4 +1,14 @@
-# Peak Compare
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9b09e634-e07f-492d-8493-804ec0c15391" />
+</p
+
+</p>
+<p align="center">
+    <a href="https://github.com/sof202/PeakCompare/commits/main/" alt="Commit activity">
+        <img src="https://img.shields.io/github/commit-activity/m/sof202/PeakCompare?style=for-the-badge&color=blue" /></a>
+    <a href="https://github.com/sof202/PeakCompare/blob/main/LICENSE" alt="License">
+        <img src="https://img.shields.io/github/license/sof202/PeakCompare?style=for-the-badge&color=blue" /></a>
+</p>
 
 When using MACS3 to peak call data, you may want to know if this peak is shared
 between each dataset. Due to the issues around short read data and the nature
