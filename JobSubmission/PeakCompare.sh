@@ -59,6 +59,12 @@ move_log_files() {
     "${log_directory}/${timestamp}_${SLURM_JOB_ID}_peakcompare.err"
 }
 
+print_config_file() {
+    local config_file_location
+    config_file_location=$1
+    cat "${config_file_location}"
+}
+
 subset_file() {
   file=$1
   grep "${CHROMOSOME}" "${file}" > "${TEMP_DIRECTORY}/$(basename "${file}")"
@@ -80,6 +86,9 @@ main() {
     validate_config_file "${config_file}"
     source "${config_file}" || exit 1
     move_log_files
+    if [[ "${PRINT_CONFIG}" -eq 1 ]]; then 
+        print_config_file "${config_file}"
+    fi
     mkdir -p "${TEMP_DIRECTORY}"
 
     subset_file "${REFERENCE_MERGED_PEAK_FILE}"

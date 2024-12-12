@@ -58,3 +58,8 @@ LARGE_LOCAL_SIZE=10000
 
 # If you want to keep all intermediate files, set this to 1
 DEBUG_MODE=0
+
+# If you want this config file to be printed to the log files, set this to 1
+# otherwise set it to 0. This is so you can remember the specific parameters
+# that you used for analsis.
+PRINT_CONFIG=1

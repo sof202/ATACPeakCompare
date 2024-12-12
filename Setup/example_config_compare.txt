@@ -59,3 +59,12 @@ LOG_DIRECTORY="path/to/log/files"
 # This is the directory temporary files will be put in (they will be deleted
 # after running)
 TEMP_DIRECTORY="/tmp"
+
+# ----- #
+# DEBUG #
+# ----- #
+
+# If you want this config file to be printed to the log files, set this to 1
+# otherwise set it to 0. This is so you can remember the specific parameters
+# that you used for analsis.
+PRINT_CONFIG=1
