@@ -80,26 +80,29 @@ def main(args: argparse.Namespace) -> None:
         reference_labelled_peaks,
         args.cutoff
     )
-    if args.unmerged:
-        metric = calculate_metric(
-            reference_labelled_peaks,
-            pseudopeaks,
-            include_merged_peaks=False
-        )
+    metric = calculate_metric(
+        reference_labelled_peaks,
+        pseudopeaks,
+        include_merged_peaks=(not args.unmerged)
+    )
+    if args.parsable:
+        print(metric)
     else:
-        metric = calculate_metric(
-            reference_labelled_peaks,
-            pseudopeaks,
-            include_merged_peaks=True
-        )
-    print(f"The metric for these datasets over the range {start} to {end} ",
-          f"for chromosome {chromosome} is: {metric}.")
+        print("The metric for these datasets over the range ",
+              f"{start} to {end} for chromosome {chromosome} is: {metric}.")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog="PeakCompare",
         description="Determine how likely a peak is to be in two datasets."
+    )
+    parser.add_argument(
+        "-p",
+        "--parsable",
+        action="store_true",
+        help=("Set this if you want the output of the script to be computer ",
+              "parsable (and not human readable).")
     )
     parser.add_argument(
         "--unmerged",
