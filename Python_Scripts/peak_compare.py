@@ -80,18 +80,11 @@ def main(args: argparse.Namespace) -> None:
         reference_labelled_peaks,
         args.cutoff
     )
-    if args.unmerged:
-        metric = calculate_metric(
-            reference_labelled_peaks,
-            pseudopeaks,
-            include_merged_peaks=False
-        )
-    else:
-        metric = calculate_metric(
-            reference_labelled_peaks,
-            pseudopeaks,
-            include_merged_peaks=True
-        )
+    metric = calculate_metric(
+        reference_labelled_peaks,
+        pseudopeaks,
+        include_merged_peaks=(not args.unmerged)
+    )
     print(f"The metric for these datasets over the range {start} to {end} ",
           f"for chromosome {chromosome} is: {metric}.")
 
