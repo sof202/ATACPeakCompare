@@ -1,22 +1,18 @@
-# ATAC Peak Compare
+# Peak Compare
 
-When using MACS3 to peak call ATAC-Seq, you may want to know if this peak is
-shared between each dataset. Due to the issues around short read data and the
-nature of how they manifest in ATAC-Seq data this task is made difficult. A
-naive approach would be to just use a set operation on the output bed files
-of your two samples (intersection, for example). However, this approach has
-proven to be ineffective as peaks don't align nicely between datasets due to
-the dichotomous nature of peak calling (a base can be in a peak, or not in a
-peak). The purpose of this repository is to provide a metric that can be used
-to suggest if a peak is in both datasets (or not).
+When using MACS3 to peak call data, you may want to know if this peak is shared
+between each dataset. Due to the issues around short read data and the nature
+of how they manifest in count based data this task is made difficult. A naive
+approach would be to just use a set operation on the output bed files of your
+two samples (intersection, for example). However, this approach has proven to
+be ineffective as peaks don't align nicely between datasets due to the
+dichotomous nature of peak calling (a base can be in a peak, or not in a peak).
+The purpose of this repository is to provide a metric that can be used to
+suggest if a peak is in both datasets (or not).
 
 This repostory contains a pipeline that peak calls two samples in the steps
 outlined in the 
 [official macs3 tutorial](https://macs3-project.github.io/MACS/docs/Advanced_Step-by-step_Peak_Calling.html).
-
-Although this pipeline was designed to look at ATAC data, the only assumption
-on your data is that it is peak callable (count based data). Hence ChIP-Seq
-and DNase-Seq (and many more) are also applicable to be used here.
 
 ## Setup
 
