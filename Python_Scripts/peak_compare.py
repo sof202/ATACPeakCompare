@@ -120,7 +120,7 @@ if __name__ == "__main__":
         nargs='?',
         const=50,
         type=int,
-        help=("The significance used when calculating confidence intervals.")
+        help=("The window size used when calculating confidence intervals.")
     )
     parser.add_argument(
         "chromosome",
