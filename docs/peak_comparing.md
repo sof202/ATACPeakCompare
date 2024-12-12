@@ -5,7 +5,7 @@ reference dataset and your comparison dataset, you can now compare regions
 between the two. The purpose of this script is to generate a metric that aims
 to tell the user how likely that a comparable peak in the comparison dataset
 exists (given a peak exists in the reference dataset). Details on how to
-interpret the output metric can be found [here].
+interpret the output metric can be found [here](./metric_interpretation.md).
 
 ## Running
 
