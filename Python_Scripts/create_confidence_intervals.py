@@ -14,7 +14,7 @@ class ConfidenceInterval(NamedTuple):
 
 
 def calculate_lambda_ci(lambdas: np.ndarray,
-                        significance: float,
+                        significance: float = 0.95,
                         window_size: int = 50) -> ConfidenceInterval:
     """
     Calculates confidence intervals for lambda values, considering variance in
@@ -50,7 +50,7 @@ def calculate_lambda_ci(lambdas: np.ndarray,
 
 
 def generate_bias_track_ci(bias_bedbase: BedBase,
-                           significance: float,
+                           significance: float = 0.95,
                            window_size: int = 50) -> BedBaseCI:
     lambda_ci = calculate_lambda_ci(
         lambdas=bias_bedbase.get("SCORE").to_numpy(),
@@ -72,7 +72,7 @@ def calculate_pavlue(reads: np.ndarray, lambdas: np.ndarray) -> np.ndarray:
 
 def generate_pvalue_ci(bias_bedbase: BedBase,
                        coverage_bedbase: BedBase,
-                       significance: float,
+                       significance: float = 0.95,
                        window_size: int = 50) -> BedBaseCI:
     """
     Generates a confidence interval for the pvalue of the coverage track
