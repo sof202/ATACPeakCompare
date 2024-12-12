@@ -112,6 +112,7 @@ if __name__ == "__main__":
         "--significance",
         nargs='?',
         const=0.95,
+        default=0.95,
         type=float,
         help=("The significance used when calculating confidence intervals.")
     )
@@ -119,6 +120,7 @@ if __name__ == "__main__":
         "--window_size",
         nargs='?',
         const=50,
+        default=50,
         type=int,
         help=("The window size used when calculating confidence intervals.")
     )
