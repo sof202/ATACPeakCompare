@@ -1,0 +1,15 @@
+site_name: PeakCompare Documentation
+repo_url: https://github.com/sof202/PeakCompare
+site_description: "Documentation for PeakCompare"
+site_author: "Sam Fletcher"
+copyright: "© 2024, Sam Fletcher"
+theme:
+  logo: logo.svg
+  favicon: logo.svg
+  name: material
+  palette:
+    scheme: slate
+    primary: black
+    accent: green
+
+
