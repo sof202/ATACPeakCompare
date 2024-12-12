@@ -109,7 +109,7 @@ if __name__ == "__main__":
               "merging when calculating the metric.")
     )
     parser.add_argument(
-        "--signficance",
+        "--significance",
         nargs='?',
         const=0.95,
         type=float,
