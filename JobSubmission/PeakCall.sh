@@ -62,6 +62,12 @@ move_log_files() {
     "${log_directory}/${timestamp}_${SLURM_JOB_ID}_peakcall.err"
 }
 
+print_config_file() {
+    local config_file_location
+    config_file_location=$1
+    cat "${config_file_location}"
+}
+
 remove_duplicates() {
     macs3 filterdup \
         -i "${INPUT_FILE}" \
@@ -291,6 +297,9 @@ main() {
     validate_config_file "${config_file}"
     source "${config_file}" || exit 1
     move_log_files
+    if [[ "${PRINT_CONFIG}" -eq 1 ]]; then 
+        print_config_file "${config_file}"
+    fi
     remove_duplicates
     if [[ "${BUILD_MODEL}" -eq 1 ]]; then
         build_model
