@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from IO import BedGraph, BedBase
 
@@ -49,6 +50,7 @@ def convert_to_bedbase(bedgraph: BedGraph,
         ordered=False,
         right=False
     )
+    score = np.nan_to_num(score, nan=np.nanmin(score))
     bedbase = BedBase(
         CHR=chromosome_column,
         BASE=bases,
