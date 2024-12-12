@@ -5,11 +5,11 @@ different files are required that can be obtained via MACS. Usually, peak
 calling with MACS is via the function `callpeaks`. However, this process does
 not give us the outputs of intermediate steps that MACS carries out. As such
 the script `PeakCall.sh` will use the fundamental functions of MACS to generate
-these intemediate files:
+these intermediate files:
 
 - The coverage/pileup track
 - The bias track
-- The pvalues track
+- The p-values track
 - The set of peaks before merge process
 - The set of peaks after merge process
 
@@ -27,18 +27,19 @@ After this, you can submit the script `PeakCall.sh` to a SLURM queue with:
 sbatch -p queue .../PeakCall.sh path/to/config_file.txt
 ```
 
-The config file to use for this script is given in `example_config_call.txt`.
-The queue to send the job to will depend on the HPC system you are using. You
-can view all available partitions with:
+The configuration file to use for this script is given in
+`example_config_call.txt`. The queue to send the job to will depend on the HPC
+system you are using. You can view all available partitions with:
 
 ```bash
 sinfo show partitions | awk '{print $1}' | uniq
 ```
 
-The script is designed to work with or without a config file and will
+The script is designed to work with or without a configuration file and will
 process a single set of reads in any format MACS can work with. It is expected
 that you run this script for each sample (or merged set of samples) so it is
-recommended that you have two config files (so jobs can run concurrently).
+recommended that you have two configuration files (so jobs can run
+concurrently).
 
 ## Why merged and unmerged peaks
 
@@ -47,7 +48,7 @@ merge any peaks that are suitably close together. The recommended minimum gap
 between peaks is the read length of the dataset. The metric needs to be able to
 differentiate between peaks that are called due to this merging process because
 such base pair positions will have very low coverage. The metric heavily relies
-on comparing pvalues and read counts, if a peak has very low pvalues and read
+on comparing p-values and read counts, if a peak has very low p-values and read
 counts, this can be misleading if the merging process is not accounted for.
 
 ## Cutoff analysis

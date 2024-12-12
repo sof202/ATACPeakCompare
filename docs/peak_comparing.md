@@ -63,20 +63,20 @@ is problematic when comparing two datasets. How can we determine if a peak is
 truly absent in the comparison dataset when there is a possibility that a
 single extra read in the region could tip the balance? 
 
-The solution given with this tool is to look at the condifence intervals for
-each pvalue instead of looking at whether they hit certain thresholds. If the
+The solution given with this tool is to look at the confidence intervals for
+each p-value instead of looking at whether they hit certain thresholds. If the
 confidence intervals for each dataset overlap, it suggests that (under the
 chosen [significance](#significance)) the true value could be shared by each
 dataset at this point. Considering these intervals is both more lax and strict
 than simply using a single threshold value. If the region in the reference
 dataset is a very significant peak (very low p-value), then this method
 required the same region in the comparison dataset to have similarly small
-pvalues to be considered as a pseudopeak.
+p-values to be considered as a pseudopeak.
 
 Comparing confidence intervals is useful, but comes with a drawback in this
 particular case of using MACS to determine peaks. As mentioned in 
 [this section](./peak_calling.md#why-merged-and-unmerged-peaks), some peaks
-may have a very high pvalue (not significant), and yet be called a peak due to
+may have a very high p-value (not significant), and yet be called a peak due to
 the merging process. This is why both files are required by this python script
 and allows us to now formally state what defines a psuedopeak.
 
@@ -144,7 +144,7 @@ described [here](#how-the-metric-is-calculated). Picking a value that is
 smaller will result in tighter confidence intervals and therefore results in
 stricter [criteria for psuedopeaks](#pseudopeak-definition). There is no
 recommended value here, just be aware that confidence intervals are being
-compared against each other (so a signficance of 95% is more like 90%).
+compared against each other (so a significance of 95% is more like 90%).
 
 ### Window size
 
@@ -153,15 +153,15 @@ is used to calculate local variance in the bias track. A suitable value for
 the window size will be between a quarter and half of the fragment length for
 each dataset. It should be noted that a smaller window size will result in the
 variance calculated being more localised. However, this comes with the caveat
-that less variance can be observed (consider the case when windowsize is 0). A
+that less variance can be observed (consider the case when window size is 0). A
 careful balance should be chosen here.
 
 ### Unmerged
 
 You may wish to discount peak regions in the reference dataset that are a
 result of the merging process entirely when calculating the metric. To do this
-you can specify `UNMERGED=1` in the config file (or use `--unmerged` if using
-the python script). This will mean that the metric will only look at the
+you can specify `UNMERGED=1` in the configuration file (or use `--unmerged` if
+using the python script). This will mean that the metric will only look at the
 ratio of psuedopeaks (in the comparison dataset) with the unmerged peaks (in
 the reference dataset). All peaks that are a result of merging will be ignored.
 
